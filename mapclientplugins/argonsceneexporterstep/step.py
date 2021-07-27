@@ -19,7 +19,7 @@ class argonsceneexporterstep(WorkflowStepMountPoint):
     """
 
     def __init__(self, location):
-        super(argonsceneexporterstep, self).__init__('argonsceneexporterstep', location)
+        super(argonsceneexporterstep, self).__init__('Argon Scene Exporter', location)
         self._configured = False # A step cannot be executed until it has been configured.
         self._category = 'Sink'
         # Add any other initialisation code here:
@@ -45,12 +45,12 @@ class argonsceneexporterstep(WorkflowStepMountPoint):
         may be connected up to a button in a widget for example.
         """
         # Put your execute step code here before calling the '_doneExecution' method.
-        abs_path = os.path.join(self._location, self._config['file'])
         self._model = ArgonSceneExporterModel(self._portData0, self._location, self._config['identifier'])
         self._model._prefix = self._config['prefix']
         self._model._numberOfTimeSteps = int(self._config['timeSteps'])
         self._model._initialTime = float(self._config['initialTime'])
         self._model._finishTime = float(self._config['finishTime'])
+        abs_path = os.path.join(self._location, self._config['file'])
         self._model._fileLocation = abs_path
         self._model.done()
         self._doneExecution()
