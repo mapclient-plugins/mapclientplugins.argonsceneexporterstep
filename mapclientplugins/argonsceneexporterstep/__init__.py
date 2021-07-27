@@ -9,7 +9,7 @@ __stepname__ = 'argonsceneexporterstep'
 __location__ = 'https://github.com/Kayvv/mapclientplugins.argonsceneexporterstep.git'
 
 # import class that derives itself from the step mountpoint.
-from mapclientplugins.argonsceneexporterstepstep import step
+from mapclientplugins.argonsceneexporterstep import step
 
 # Import the resource file when the module is loaded,
 # this enables the framework to use the step icon.

@@ -1,6 +1,6 @@
 
 <RCC>
-  <qresource prefix="argonsceneexporterstepstep">
+  <qresource prefix="argonsceneexporterstep">
     <file>images/data-sink.png</file>
   </qresource>
 </RCC>

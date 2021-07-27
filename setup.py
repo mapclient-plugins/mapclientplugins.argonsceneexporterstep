@@ -31,7 +31,7 @@ class InstallCommand(install):
         subprocess.call(['pip', 'install', '-r', os.path.join(SETUP_DIR, 'requirements.txt')])
 
 
-setup(name='mapclientplugins.argonsceneexporterstepstep',
+setup(name='mapclientplugins.argonsceneexporterstep',
     version='0.1.0',
     description='',
     long_description='\n'.join(readme) + source_license,
@@ -41,7 +41,7 @@ setup(name='mapclientplugins.argonsceneexporterstepstep',
       "Programming Language :: Python",
     ],
     cmdclass={'install': InstallCommand,},
-    author='Kay',
+    author='Kay Wang',
     author_email='',
     url='',
     packages=find_packages(exclude=['ez_setup',]),

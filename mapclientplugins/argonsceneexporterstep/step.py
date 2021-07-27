@@ -2,26 +2,28 @@
 """
 MAP Client Plugin Step
 """
+import os
 import json
 
 from PySide2 import QtGui, QtWidgets
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
-from mapclientplugins.argonsceneexporterstepstep.configuredialog import ConfigureDialog
+from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDialog
+from mapclientplugins.argonsceneexporterstep.model.argonsceneexportermodel import ArgonSceneExporterModel
 
 
-class argonsceneexporterstepStep(WorkflowStepMountPoint):
+class argonsceneexporterstep(WorkflowStepMountPoint):
     """
     Skeleton step which is intended to be a helpful starting point
     for new steps.
     """
 
     def __init__(self, location):
-        super(argonsceneexporterstepStep, self).__init__('argonsceneexporterstep', location)
+        super(argonsceneexporterstep, self).__init__('argonsceneexporterstep', location)
         self._configured = False # A step cannot be executed until it has been configured.
         self._category = 'Sink'
         # Add any other initialisation code here:
-        self._icon =  QtGui.QImage(':/argonsceneexporterstepstep/images/data-sink.png')
+        self._icon =  QtGui.QImage(':/argonsceneexporterstep/images/data-sink.png')
         # Ports:
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
@@ -31,10 +33,10 @@ class argonsceneexporterstepStep(WorkflowStepMountPoint):
         # Config:
         self._config = {}
         self._config['identifier'] = ''
-        self._config['Prefix'] = ''
+        self._config['prefix'] = ''
         self._config['timeSteps'] = ''
-        self._config['Initial Time'] = ''
-        self._config['Finish Time'] = ''
+        self._config['initialTime'] = ''
+        self._config['finishTime'] = ''
 
     def execute(self):
         """
@@ -43,6 +45,14 @@ class argonsceneexporterstepStep(WorkflowStepMountPoint):
         may be connected up to a button in a widget for example.
         """
         # Put your execute step code here before calling the '_doneExecution' method.
+        abs_path = os.path.join(self._location, self._config['file'])
+        self._model = ArgonSceneExporterModel(self._portData0, self._location, self._config['identifier'])
+        self._model._prefix = self._config['prefix']
+        self._model._numberOfTimeSteps = int(self._config['timeSteps'])
+        self._model._initialTime = float(self._config['initialTime'])
+        self._model._finishTime = float(self._config['finishTime'])
+        self._model._fileLocation = abs_path
+        self._model.done()
         self._doneExecution()
 
     def setPortData(self, index, dataIn):
@@ -65,6 +75,7 @@ class argonsceneexporterstepStep(WorkflowStepMountPoint):
             self._configured = True
         """
         dlg = ConfigureDialog(QtWidgets.QApplication.activeWindow().current_widget())
+        dlg.setWorkflowLocation(self._location)
         dlg.identifierOccursCount = self._identifierOccursCount
         dlg.setConfig(self._config)
         dlg.validate()
@@ -105,6 +116,7 @@ class argonsceneexporterstepStep(WorkflowStepMountPoint):
         self._config.update(json.loads(string))
 
         d = ConfigureDialog()
+        d.setWorkflowLocation(self._location)
         d.identifierOccursCount = self._identifierOccursCount
         d.setConfig(self._config)
         self._configured = d.validate()

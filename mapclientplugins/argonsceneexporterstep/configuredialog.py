@@ -1,7 +1,8 @@
 
+import os
 
 from PySide2 import QtWidgets
-from mapclientplugins.argonsceneexporterstepstep.ui_configuredialog import Ui_ConfigureDialog
+from mapclientplugins.argonsceneexporterstep.ui_configuredialog import Ui_ConfigureDialog
 
 INVALID_STYLE_SHEET = 'background-color: rgba(239, 0, 0, 50)'
 DEFAULT_STYLE_SHEET = ''
@@ -26,10 +27,14 @@ class ConfigureDialog(QtWidgets.QDialog):
         # We will use this method to decide whether the identifier is unique.
         self.identifierOccursCount = None
 
+        self._workflow_location = None
+        self._previousLocation = ''
+
         self._makeConnections()
 
     def _makeConnections(self):
         self._ui.lineEdit0.textChanged.connect(self.validate)
+        self._ui.pushButtonFileChooser.clicked.connect(self._fileChooserClicked)
 
     def accept(self):
         """
@@ -44,6 +49,9 @@ class ConfigureDialog(QtWidgets.QDialog):
 
         if result == QtWidgets.QMessageBox.Yes:
             QtWidgets.QDialog.accept(self)
+            
+    def setWorkflowLocation(self, location):
+        self._workflow_location = location
 
     def validate(self):
         """
@@ -60,7 +68,9 @@ class ConfigureDialog(QtWidgets.QDialog):
         else:
             self._ui.lineEdit0.setStyleSheet(INVALID_STYLE_SHEET)
 
-        return valid
+        valid_destination = True if len(self._ui.lineEditFileLocation.text()) > 0 else False
+
+        return valid and valid_destination
 
     def getConfig(self):
         '''
@@ -71,7 +81,16 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._previousIdentifier = self._ui.lineEdit0.text()
         config = {}
         config['identifier'] = self._ui.lineEdit0.text()
-        config[''] = self._ui.lineEdit1.text()
+        config['prefix'] = self._ui.prefix_lineEdit.text()
+        config['timeSteps'] = self._ui.timeSteps_lineEdit.text()
+        config['initialTime'] = self._ui.initialTime_lineEdit.text()
+        config['finishTime'] = self._ui.finishTime_lineEdit.text()
+        config['file'] = self._ui.lineEditFileLocation.text()
+        if self._previousLocation:
+            config['previous_location'] = os.path.relpath(self._previousLocation, self._workflow_location)
+        else:
+            config['previous_location'] = ''
+            
         return config
 
     def setConfig(self, config):
@@ -82,5 +101,19 @@ class ConfigureDialog(QtWidgets.QDialog):
         '''
         self._previousIdentifier = config['identifier']
         self._ui.lineEdit0.setText(config['identifier'])
-        self._ui.lineEdit1.setText(config[''])
+        self._ui.prefix_lineEdit.setText(config['prefix'])
+        self._ui.timeSteps_lineEdit.setText(config['timeSteps'])
+        self._ui.initialTime_lineEdit.setText(config['initialTime'])
+        self._ui.finishTime_lineEdit.setText(config['finishTime'])
+        if 'file' in config:
+            self._ui.lineEditFileLocation.setText(config['file'])
+        if 'previous_location' in config:
+            self._previousLocation = os.path.join(self._workflow_location, config['previous_location'])
 
+    def _fileChooserClicked(self):
+        # Second parameter returned is the filter chosen
+        location = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Destination for File', self._previousLocation)
+
+        if location:
+            self._previousLocation = location
+            self._ui.lineEditFileLocation.setText(os.path.relpath(location, self._workflow_location))

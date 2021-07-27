@@ -34,15 +34,65 @@ class Ui_ConfigureDialog(object):
 
         self.formLayout.setWidget(0, QFormLayout.FieldRole, self.lineEdit0)
 
+        self.label_3 = QLabel(self.configGroupBox)
+        self.label_3.setObjectName(u"label_3")
+
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_3)
+
+        self.prefix_lineEdit = QLineEdit(self.configGroupBox)
+        self.prefix_lineEdit.setObjectName(u"prefix_lineEdit")
+
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.prefix_lineEdit)
+
+        self.label_4 = QLabel(self.configGroupBox)
+        self.label_4.setObjectName(u"label_4")
+
+        self.formLayout.setWidget(2, QFormLayout.LabelRole, self.label_4)
+
+        self.timeSteps_lineEdit = QLineEdit(self.configGroupBox)
+        self.timeSteps_lineEdit.setObjectName(u"timeSteps_lineEdit")
+
+        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.timeSteps_lineEdit)
+
+        self.label = QLabel(self.configGroupBox)
+        self.label.setObjectName(u"label")
+
+        self.formLayout.setWidget(3, QFormLayout.LabelRole, self.label)
+
+        self.initialTime_lineEdit = QLineEdit(self.configGroupBox)
+        self.initialTime_lineEdit.setObjectName(u"initialTime_lineEdit")
+
+        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.initialTime_lineEdit)
+
+        self.label_2 = QLabel(self.configGroupBox)
+        self.label_2.setObjectName(u"label_2")
+
+        self.formLayout.setWidget(4, QFormLayout.LabelRole, self.label_2)
+
+        self.finishTime_lineEdit = QLineEdit(self.configGroupBox)
+        self.finishTime_lineEdit.setObjectName(u"finishTime_lineEdit")
+
+        self.formLayout.setWidget(4, QFormLayout.FieldRole, self.finishTime_lineEdit)
+
         self.label1 = QLabel(self.configGroupBox)
         self.label1.setObjectName(u"label1")
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label1)
+        self.formLayout.setWidget(5, QFormLayout.LabelRole, self.label1)
 
-        self.lineEdit1 = QLineEdit(self.configGroupBox)
-        self.lineEdit1.setObjectName(u"lineEdit1")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.lineEditFileLocation = QLineEdit(self.configGroupBox)
+        self.lineEditFileLocation.setObjectName(u"lineEditFileLocation")
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.lineEdit1)
+        self.horizontalLayout.addWidget(self.lineEditFileLocation)
+
+        self.pushButtonFileChooser = QPushButton(self.configGroupBox)
+        self.pushButtonFileChooser.setObjectName(u"pushButtonFileChooser")
+
+        self.horizontalLayout.addWidget(self.pushButtonFileChooser)
+
+
+        self.formLayout.setLayout(5, QFormLayout.FieldRole, self.horizontalLayout)
 
 
         self.gridLayout.addWidget(self.configGroupBox, 0, 0, 1, 1)
@@ -66,6 +116,11 @@ class Ui_ConfigureDialog(object):
         ConfigureDialog.setWindowTitle(QCoreApplication.translate("ConfigureDialog", u"Configure Step", None))
         self.configGroupBox.setTitle("")
         self.label0.setText(QCoreApplication.translate("ConfigureDialog", u"identifier:  ", None))
-        self.label1.setText(QCoreApplication.translate("ConfigureDialog", u":  ", None))
+        self.label_3.setText(QCoreApplication.translate("ConfigureDialog", u"Prefix : ", None))
+        self.label_4.setText(QCoreApplication.translate("ConfigureDialog", u"Time Steps : ", None))
+        self.label.setText(QCoreApplication.translate("ConfigureDialog", u"Initial Time : ", None))
+        self.label_2.setText(QCoreApplication.translate("ConfigureDialog", u"Finish Time : ", None))
+        self.label1.setText(QCoreApplication.translate("ConfigureDialog", u"File:  ", None))
+        self.pushButtonFileChooser.setText(QCoreApplication.translate("ConfigureDialog", u"...", None))
     # retranslateUi
 
