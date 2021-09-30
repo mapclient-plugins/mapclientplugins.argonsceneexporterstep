@@ -1,4 +1,3 @@
-
 """
 MAP Client Plugin Step
 """
@@ -12,31 +11,27 @@ from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDia
 from mapclientplugins.argonsceneexporterstep.model.argonsceneexportermodel import ArgonSceneExporterModel
 
 
-class argonsceneexporterstep(WorkflowStepMountPoint):
+class ArgonSceneExporterStep(WorkflowStepMountPoint):
     """
     Skeleton step which is intended to be a helpful starting point
     for new steps.
     """
 
     def __init__(self, location):
-        super(argonsceneexporterstep, self).__init__('Argon Scene Exporter', location)
-        self._configured = False # A step cannot be executed until it has been configured.
+        super(ArgonSceneExporterStep, self).__init__('Argon Scene Exporter', location)
+        self._configured = False  # A step cannot be executed until it has been configured.
         self._category = 'Sink'
         # Add any other initialisation code here:
-        self._icon =  QtGui.QImage(':/argonsceneexporterstep/images/data-sink.png')
+        self._icon = QtGui.QImage(':/argonsceneexporterstep/images/data-sink.png')
         # Ports:
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#file_location'))
         # Port data:
-        self._portData0 = None # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
+        self._portData0 = None  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
         # Config:
-        self._config = {}
-        self._config['identifier'] = ''
-        self._config['prefix'] = ''
-        self._config['timeSteps'] = ''
-        self._config['initialTime'] = ''
-        self._config['finishTime'] = ''
+        self._config = {'identifier': '', 'prefix': '', 'timeSteps': '', 'initialTime': '', 'finishTime': ''}
+        self._model = None
 
     def execute(self):
         """
@@ -64,7 +59,7 @@ class argonsceneexporterstep(WorkflowStepMountPoint):
         :param index: Index of the port to return.
         :param dataIn: The data to set for the port at the given index.
         """
-        self._portData0 = dataIn # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
+        self._portData0 = dataIn  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
 
     def configure(self):
         """
@@ -120,5 +115,3 @@ class argonsceneexporterstep(WorkflowStepMountPoint):
         d.identifierOccursCount = self._identifierOccursCount
         d.setConfig(self._config)
         self._configured = d.validate()
-
-
