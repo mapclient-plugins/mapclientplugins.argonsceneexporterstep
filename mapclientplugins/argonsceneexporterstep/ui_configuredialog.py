@@ -17,7 +17,7 @@ class Ui_ConfigureDialog(object):
     def setupUi(self, ConfigureDialog):
         if not ConfigureDialog.objectName():
             ConfigureDialog.setObjectName(u"ConfigureDialog")
-        ConfigureDialog.resize(418, 303)
+        ConfigureDialog.resize(615, 404)
         self.gridLayout = QGridLayout(ConfigureDialog)
         self.gridLayout.setObjectName(u"gridLayout")
         self.configGroupBox = QGroupBox(ConfigureDialog)
@@ -29,10 +29,10 @@ class Ui_ConfigureDialog(object):
 
         self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label0)
 
-        self.lineEdit0 = QLineEdit(self.configGroupBox)
-        self.lineEdit0.setObjectName(u"lineEdit0")
+        self.lineEditIdentifier = QLineEdit(self.configGroupBox)
+        self.lineEditIdentifier.setObjectName(u"lineEditIdentifier")
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.lineEdit0)
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.lineEditIdentifier)
 
         self.label_3 = QLabel(self.configGroupBox)
         self.label_3.setObjectName(u"label_3")
@@ -81,15 +81,15 @@ class Ui_ConfigureDialog(object):
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.lineEditFileLocation = QLineEdit(self.configGroupBox)
-        self.lineEditFileLocation.setObjectName(u"lineEditFileLocation")
+        self.lineEditOutputDirectory = QLineEdit(self.configGroupBox)
+        self.lineEditOutputDirectory.setObjectName(u"lineEditOutputDirectory")
 
-        self.horizontalLayout.addWidget(self.lineEditFileLocation)
+        self.horizontalLayout.addWidget(self.lineEditOutputDirectory)
 
-        self.pushButtonFileChooser = QPushButton(self.configGroupBox)
-        self.pushButtonFileChooser.setObjectName(u"pushButtonFileChooser")
+        self.pushButtonDIrectoryChooser = QPushButton(self.configGroupBox)
+        self.pushButtonDIrectoryChooser.setObjectName(u"pushButtonDIrectoryChooser")
 
-        self.horizontalLayout.addWidget(self.pushButtonFileChooser)
+        self.horizontalLayout.addWidget(self.pushButtonDIrectoryChooser)
 
 
         self.formLayout.setLayout(5, QFormLayout.FieldRole, self.horizontalLayout)
@@ -120,7 +120,7 @@ class Ui_ConfigureDialog(object):
         self.label_4.setText(QCoreApplication.translate("ConfigureDialog", u"Time Steps : ", None))
         self.label.setText(QCoreApplication.translate("ConfigureDialog", u"Initial Time : ", None))
         self.label_2.setText(QCoreApplication.translate("ConfigureDialog", u"Finish Time : ", None))
-        self.label1.setText(QCoreApplication.translate("ConfigureDialog", u"File:  ", None))
-        self.pushButtonFileChooser.setText(QCoreApplication.translate("ConfigureDialog", u"...", None))
+        self.label1.setText(QCoreApplication.translate("ConfigureDialog", u"Output Directory:", None))
+        self.pushButtonDIrectoryChooser.setText(QCoreApplication.translate("ConfigureDialog", u"...", None))
     # retranslateUi
 

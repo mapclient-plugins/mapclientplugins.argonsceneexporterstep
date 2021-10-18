@@ -8,7 +8,8 @@ from PySide2 import QtGui, QtWidgets
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDialog
-from mapclientplugins.argonsceneexporterstep.model.argonsceneexportermodel import ArgonSceneExporterModel
+
+from opencmiss.exporter.webgl import ArgonSceneExporter
 
 
 class ArgonSceneExporterStep(WorkflowStepMountPoint):
@@ -30,7 +31,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Port data:
         self._portData0 = None  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
         # Config:
-        self._config = {'identifier': '', 'prefix': '', 'timeSteps': '', 'initialTime': '', 'finishTime': ''}
+        self._config = {'identifier': '', 'prefix': '', 'timeSteps': '', 'initialTime': '', 'finishTime': '', 'outputDir': ''}
         self._model = None
 
     def execute(self):
@@ -40,14 +41,16 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         may be connected up to a button in a widget for example.
         """
         # Put your execute step code here before calling the '_doneExecution' method.
-        self._model = ArgonSceneExporterModel(self._portData0, self._location, self._config['identifier'])
-        self._model._prefix = self._config['prefix']
-        self._model._numberOfTimeSteps = int(self._config['timeSteps'])
-        self._model._initialTime = float(self._config['initialTime'])
-        self._model._finishTime = float(self._config['finishTime'])
-        abs_path = os.path.join(self._location, self._config['file'])
-        self._model._fileLocation = abs_path
-        self._model.done()
+        # os.path.join(self._location, self._config['identifier'])
+        output_dir = self._config['outputDir'] if os.path.isabs(self._config['outputDir']) else os.path.join(self._location, self._config['outputDir'])
+        self._model = ArgonSceneExporter(self._portData0, output_dir)
+        self._model.set_parameters({
+            "prefix": self._config['prefix'],
+            "numberOfTimeSteps": int(self._config['timeSteps']),
+            "initialTime": float(self._config['initialTime']),
+            "finishTime": float(self._config['finishTime']),
+        })
+        self._model.export()
         self._doneExecution()
 
     def setPortData(self, index, dataIn):

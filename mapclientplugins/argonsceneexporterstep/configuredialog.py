@@ -33,8 +33,8 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._makeConnections()
 
     def _makeConnections(self):
-        self._ui.lineEdit0.textChanged.connect(self.validate)
-        self._ui.pushButtonFileChooser.clicked.connect(self._fileChooserClicked)
+        self._ui.lineEditIdentifier.textChanged.connect(self.validate)
+        self._ui.pushButtonDIrectoryChooser.clicked.connect(self._directoryChooserClicked)
 
     def accept(self):
         """
@@ -61,31 +61,26 @@ class ConfigureDialog(QtWidgets.QDialog):
         """
         # Determine if the current identifier is unique throughout the workflow
         # The identifierOccursCount method is part of the interface to the workflow framework.
-        value = self.identifierOccursCount(self._ui.lineEdit0.text())
-        valid = (value == 0) or (value == 1 and self._previousIdentifier == self._ui.lineEdit0.text())
+        value = self.identifierOccursCount(self._ui.lineEditIdentifier.text())
+        valid = (value == 0) or (value == 1 and self._previousIdentifier == self._ui.lineEditIdentifier.text())
         if valid:
-            self._ui.lineEdit0.setStyleSheet(DEFAULT_STYLE_SHEET)
+            self._ui.lineEditIdentifier.setStyleSheet(DEFAULT_STYLE_SHEET)
         else:
-            self._ui.lineEdit0.setStyleSheet(INVALID_STYLE_SHEET)
+            self._ui.lineEditIdentifier.setStyleSheet(INVALID_STYLE_SHEET)
 
-        valid_destination = True if len(self._ui.lineEditFileLocation.text()) > 0 else False
+        valid_destination = True if len(self._ui.lineEditOutputDirectory.text()) > 0 else False
 
         return valid and valid_destination
 
     def getConfig(self):
-        '''
+        """
         Get the current value of the configuration from the dialog.  Also
         set the _previousIdentifier value so that we can check uniqueness of the
         identifier over the whole of the workflow.
-        '''
-        self._previousIdentifier = self._ui.lineEdit0.text()
-        config = {}
-        config['identifier'] = self._ui.lineEdit0.text()
-        config['prefix'] = self._ui.prefix_lineEdit.text()
-        config['timeSteps'] = self._ui.timeSteps_lineEdit.text()
-        config['initialTime'] = self._ui.initialTime_lineEdit.text()
-        config['finishTime'] = self._ui.finishTime_lineEdit.text()
-        config['file'] = self._ui.lineEditFileLocation.text()
+        """
+        self._previousIdentifier = self._ui.lineEditIdentifier.text()
+        config = {'identifier': self._ui.lineEditIdentifier.text(), 'prefix': self._ui.prefix_lineEdit.text(), 'timeSteps': self._ui.timeSteps_lineEdit.text(),
+                  'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(), 'outputDir': self._ui.lineEditOutputDirectory.text()}
         if self._previousLocation:
             config['previous_location'] = os.path.relpath(self._previousLocation, self._workflow_location)
         else:
@@ -94,26 +89,26 @@ class ConfigureDialog(QtWidgets.QDialog):
         return config
 
     def setConfig(self, config):
-        '''
+        """
         Set the current value of the configuration for the dialog.  Also
         set the _previousIdentifier value so that we can check uniqueness of the
         identifier over the whole of the workflow.
-        '''
+        """
         self._previousIdentifier = config['identifier']
-        self._ui.lineEdit0.setText(config['identifier'])
+        self._ui.lineEditIdentifier.setText(config['identifier'])
         self._ui.prefix_lineEdit.setText(config['prefix'])
         self._ui.timeSteps_lineEdit.setText(config['timeSteps'])
         self._ui.initialTime_lineEdit.setText(config['initialTime'])
         self._ui.finishTime_lineEdit.setText(config['finishTime'])
-        if 'file' in config:
-            self._ui.lineEditFileLocation.setText(config['file'])
+        if 'outputDir' in config:
+            self._ui.lineEditOutputDirectory.setText(config['outputDir'])
         if 'previous_location' in config:
             self._previousLocation = os.path.join(self._workflow_location, config['previous_location'])
 
-    def _fileChooserClicked(self):
+    def _directoryChooserClicked(self):
         # Second parameter returned is the filter chosen
-        location = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Destination for File', self._previousLocation)
+        location = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Destination for export', self._previousLocation)
 
         if location:
             self._previousLocation = location
-            self._ui.lineEditFileLocation.setText(os.path.relpath(location, self._workflow_location))
+            self._ui.lineEditOutputDirectory.setText(os.path.relpath(location, self._workflow_location))

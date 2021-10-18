@@ -5,6 +5,7 @@ import os
 import json
 
 from opencmiss.argon.core.argondocument import ArgonDocument
+from opencmiss.argon.core.argonerror import ArgonError
 from opencmiss.argon.core.argonlogger import ArgonLogger
 
 
@@ -48,7 +49,7 @@ class ArgonSceneExporterModel(object):
                 self._document.deserialize(state)
                 self._location = filename
                 return True
-        except (NeonError, IOError, ValueError) as e:
+        except (ArgonError, IOError, ValueError) as e:
             ArgonLogger.getLogger().error("Failed to load Neon model " + filename + ": " + str(e))
         except:
             ArgonLogger.getLogger().error("Failed to load Neon model " + filename + ": Unknown error")
