@@ -5,6 +5,7 @@ import io
 
 SETUP_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 # List all of your Python package dependencies in the
 # requirements.txt file
 
@@ -38,17 +39,18 @@ setup(
     description='',
     long_description='\n'.join(readme) + source_license,
     classifiers=[
-      "Development Status :: 3 - Alpha",
-      "License :: OSI Approved :: Apache Software License",
-      "Programming Language :: Python",
+        "Development Status :: 3 - Alpha",
+        "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python",
     ],
-    cmdclass={'install': InstallCommand,},
+    cmdclass={'install': InstallCommand, },
     author='Kay Wang',
     author_email='',
     url='',
-    packages=find_packages(exclude=['ez_setup',]),
+    packages=find_packages(exclude=['ez_setup', ]),
     namespace_packages=['mapclientplugins'],
     include_package_data=True,
     zip_safe=False,
     install_requires=requires,
-    )
+    requires=requires,
+)

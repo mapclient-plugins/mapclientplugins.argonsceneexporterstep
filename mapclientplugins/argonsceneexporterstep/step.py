@@ -4,18 +4,18 @@ MAP Client Plugin Step
 import os
 import json
 
-from PySide2 import QtGui, QtWidgets
+from PySide2 import QtGui
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDialog
 
-from opencmiss.exporter.webgl import ArgonSceneExporter
+from opencmiss.exporter.webgl import ArgonSceneExporter as WebGLExporter
+from opencmiss.exporter.thumbnail import ArgonSceneExporter as ThumbnailExporter
 
 
 class ArgonSceneExporterStep(WorkflowStepMountPoint):
     """
-    Skeleton step which is intended to be a helpful starting point
-    for new steps.
+    Export Argon documents to different formats.
     """
 
     def __init__(self, location):
@@ -27,11 +27,11 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Ports:
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
-                      'http://physiomeproject.org/workflow/1.0/rdf-schema#file_location'))
+                      'https://opencmiss.org/1.0/rdf-schema#ArgonDocument'))
         # Port data:
-        self._portData0 = None  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
+        self._document = None  # https://opencmiss.org/1.0/rdf-schema#ArgonDocument
         # Config:
-        self._config = {'identifier': '', 'prefix': '', 'timeSteps': '', 'initialTime': '', 'finishTime': '', 'outputDir': ''}
+        self._config = {'identifier': '', 'exportType': 'webgl', 'prefix': '', 'timeSteps': '', 'initialTime': '', 'finishTime': '', 'outputDir': ''}
         self._model = None
 
     def execute(self):
@@ -43,12 +43,22 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Put your execute step code here before calling the '_doneExecution' method.
         # os.path.join(self._location, self._config['identifier'])
         output_dir = self._config['outputDir'] if os.path.isabs(self._config['outputDir']) else os.path.join(self._location, self._config['outputDir'])
-        self._model = ArgonSceneExporter(self._portData0, output_dir)
+        if self._config['exportType'] == 'webgl':
+            self._model = WebGLExporter(output_dir)
+        elif self._config['exportType'] == 'thumbnail':
+            self._model = ThumbnailExporter(output_dir)
+        else:
+            raise NotImplementedError('Current export type selection is not implemented.')
+
+        self._model.set_document(self._document)
+        number_of_time_steps = int(self._config['timeSteps']) if self._config['timeSteps'] else None
+        initial_time = float(self._config['initialTime']) if self._config['initialTime'] else None
+        finish_time = float(self._config['finishTime']) if self._config['finishTime'] else None
         self._model.set_parameters({
             "prefix": self._config['prefix'],
-            "numberOfTimeSteps": int(self._config['timeSteps']),
-            "initialTime": float(self._config['initialTime']),
-            "finishTime": float(self._config['finishTime']),
+            "numberOfTimeSteps": number_of_time_steps,
+            "initialTime": initial_time,
+            "finishTime": finish_time,
         })
         self._model.export()
         self._doneExecution()
@@ -62,7 +72,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         :param index: Index of the port to return.
         :param dataIn: The data to set for the port at the given index.
         """
-        self._portData0 = dataIn  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
+        self._document = dataIn  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
 
     def configure(self):
         """
@@ -72,7 +82,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         then set:
             self._configured = True
         """
-        dlg = ConfigureDialog(QtWidgets.QApplication.activeWindow().current_widget())
+        dlg = ConfigureDialog(self._main_window)
         dlg.setWorkflowLocation(self._location)
         dlg.identifierOccursCount = self._identifierOccursCount
         dlg.setConfig(self._config)

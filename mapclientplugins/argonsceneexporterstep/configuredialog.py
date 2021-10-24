@@ -34,7 +34,7 @@ class ConfigureDialog(QtWidgets.QDialog):
 
     def _makeConnections(self):
         self._ui.lineEditIdentifier.textChanged.connect(self.validate)
-        self._ui.pushButtonDIrectoryChooser.clicked.connect(self._directoryChooserClicked)
+        self._ui.pushButtonOutputDirectory.clicked.connect(self._directoryChooserClicked)
 
     def accept(self):
         """
@@ -80,7 +80,8 @@ class ConfigureDialog(QtWidgets.QDialog):
         """
         self._previousIdentifier = self._ui.lineEditIdentifier.text()
         config = {'identifier': self._ui.lineEditIdentifier.text(), 'prefix': self._ui.prefix_lineEdit.text(), 'timeSteps': self._ui.timeSteps_lineEdit.text(),
-                  'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(), 'outputDir': self._ui.lineEditOutputDirectory.text()}
+                  'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(),
+                  'outputDir': self._ui.lineEditOutputDirectory.text(), 'exportType': self._ui.comboBoxExportType.currentText()}
         if self._previousLocation:
             config['previous_location'] = os.path.relpath(self._previousLocation, self._workflow_location)
         else:
@@ -100,6 +101,7 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._ui.timeSteps_lineEdit.setText(config['timeSteps'])
         self._ui.initialTime_lineEdit.setText(config['initialTime'])
         self._ui.finishTime_lineEdit.setText(config['finishTime'])
+        self._ui.comboBoxExportType.setCurrentText(config['exportType'])
         if 'outputDir' in config:
             self._ui.lineEditOutputDirectory.setText(config['outputDir'])
         if 'previous_location' in config:
