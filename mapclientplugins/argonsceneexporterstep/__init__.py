@@ -6,7 +6,7 @@ MAP Client Plugin
 __version__ = '0.1.0'
 __author__ = 'Kay'
 __stepname__ = 'argonsceneexporterstep'
-__location__ = 'https://github.com/Kayvv/mapclientplugins.argonsceneexporterstep.git'
+__location__ = 'https://github.com/mapclient-plugins/mapclientplugins.argonsceneexporterstep.git'
 
 # import class that derives itself from the step mountpoint.
 from mapclientplugins.argonsceneexporterstep import step
