@@ -3,9 +3,9 @@
 MAP Client Plugin
 """
 
-__version__ = '0.1.0'
-__author__ = 'Kay'
-__stepname__ = 'argonsceneexporterstep'
+__version__ = '0.2.0'
+__author__ = 'Kay Wang'
+__stepname__ = 'Argon Scene Exporter'
 __location__ = 'https://github.com/mapclient-plugins/mapclientplugins.argonsceneexporterstep.git'
 
 # import class that derives itself from the step mountpoint.
