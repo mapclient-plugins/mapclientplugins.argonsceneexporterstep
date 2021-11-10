@@ -1,4 +1,3 @@
-
 import os
 
 from PySide2 import QtWidgets
@@ -36,6 +35,17 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._ui.lineEditIdentifier.textChanged.connect(self.validate)
         self._ui.pushButtonOutputDirectory.clicked.connect(self._directoryChooserClicked)
 
+    def _output_location(self, location=None):
+        if location is None:
+            display_path = self._ui.lineEditOutputDirectory.text()
+        else:
+            display_path = location
+
+        if self._workflow_location and os.path.isabs(display_path):
+            display_path = os.path.relpath(display_path, self._workflow_location)
+
+        return display_path
+
     def accept(self):
         """
         Override the accept method so that we can confirm saving an
@@ -43,15 +53,27 @@ class ConfigureDialog(QtWidgets.QDialog):
         """
         result = QtWidgets.QMessageBox.Yes
         if not self.validate():
-            result = QtWidgets.QMessageBox.warning(self, 'Invalid Configuration',
+            result = QtWidgets.QMessageBox.warning(
+                self, 'Invalid Configuration',
                 'This configuration is invalid.  Unpredictable behaviour may result if you choose \'Yes\', are you sure you want to save this configuration?)',
                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
 
         if result == QtWidgets.QMessageBox.Yes:
             QtWidgets.QDialog.accept(self)
-            
+
     def setWorkflowLocation(self, location):
         self._workflow_location = location
+
+    def _directory_valid(self):
+        dir_path = self._output_location()
+
+        if self._workflow_location:
+            dir_path = os.path.realpath(os.path.join(self._workflow_location, dir_path))
+
+        directory_valid = os.path.isdir(dir_path) and len(self._ui.lineEditOutputDirectory.text())
+        self._ui.lineEditOutputDirectory.setStyleSheet(DEFAULT_STYLE_SHEET if directory_valid else INVALID_STYLE_SHEET)
+
+        return directory_valid
 
     def validate(self):
         """
@@ -68,9 +90,7 @@ class ConfigureDialog(QtWidgets.QDialog):
         else:
             self._ui.lineEditIdentifier.setStyleSheet(INVALID_STYLE_SHEET)
 
-        valid_destination = True if len(self._ui.lineEditOutputDirectory.text()) > 0 else False
-
-        return valid and valid_destination
+        return valid and self._directory_valid()
 
     def getConfig(self):
         """
@@ -81,12 +101,12 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._previousIdentifier = self._ui.lineEditIdentifier.text()
         config = {'identifier': self._ui.lineEditIdentifier.text(), 'prefix': self._ui.prefix_lineEdit.text(), 'timeSteps': self._ui.timeSteps_lineEdit.text(),
                   'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(),
-                  'outputDir': self._ui.lineEditOutputDirectory.text(), 'exportType': self._ui.comboBoxExportType.currentText()}
+                  'outputDir': self._output_location(), 'exportType': self._ui.comboBoxExportType.currentText()}
         if self._previousLocation:
             config['previous_location'] = os.path.relpath(self._previousLocation, self._workflow_location)
         else:
             config['previous_location'] = ''
-            
+
         return config
 
     def setConfig(self, config):
@@ -113,4 +133,6 @@ class ConfigureDialog(QtWidgets.QDialog):
 
         if location:
             self._previousLocation = location
-            self._ui.lineEditOutputDirectory.setText(os.path.relpath(location, self._workflow_location))
+            display_location = self._output_location(location)
+            self._ui.lineEditOutputDirectory.setText(display_location)
+            self._directory_valid()

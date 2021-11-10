@@ -43,6 +43,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Put your execute step code here before calling the '_doneExecution' method.
         # os.path.join(self._location, self._config['identifier'])
         output_dir = self._config['outputDir'] if os.path.isabs(self._config['outputDir']) else os.path.join(self._location, self._config['outputDir'])
+        output_dir = os.path.realpath(output_dir)
         if self._config['exportType'] == 'webgl':
             self._model = WebGLExporter(output_dir)
         elif self._config['exportType'] == 'thumbnail':
