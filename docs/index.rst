@@ -40,3 +40,12 @@ The *Finish Time* parameter, is the final time to export the scene to.
 
 The *Time Steps*, *Initial Time*, and *Finish Time* are only appropriate for time varying scenes.
 If the scene is not time varying these parameters are ignored.
+
+Ports
+-----
+
+This plugin:
+
+* **uses**:
+
+  * *https://opencmiss.org/1.0/rdf-schema#ArgonDocument*
