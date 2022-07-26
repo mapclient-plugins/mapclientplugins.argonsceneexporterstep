@@ -14,7 +14,7 @@ from opencmiss.exporter.thumbnail import ArgonSceneExporter as ThumbnailExporter
 
 
 class ArgonSceneExporterStep(WorkflowStepMountPoint):
-    """v
+    """
     Export Argon documents to different formats.
     """
 
