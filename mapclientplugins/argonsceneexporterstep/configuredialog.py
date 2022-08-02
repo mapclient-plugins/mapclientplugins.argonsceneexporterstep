@@ -30,7 +30,7 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._workflow_location = None
         self._previousLocation = ''
 
-        self.setWhatsThis('<html>Please read documentation: \n<a href="https://abi-mapping-tools.readthedocs.io/en/latest/mapclientplugins.argonsceneexporterstep/docs/index.html">online help</a></html>')
+        self.setWhatsThis('<html>Please read the documentation available \n<a href="https://abi-mapping-tools.readthedocs.io/en/latest/mapclientplugins.argonsceneexporterstep/docs/index.html">here</a> for further details.</html>')
 
         self._makeConnections()
 
