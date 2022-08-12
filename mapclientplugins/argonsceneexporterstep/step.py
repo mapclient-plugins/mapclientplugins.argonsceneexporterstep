@@ -4,7 +4,7 @@ MAP Client Plugin Step
 import os
 import json
 
-from PySide2 import QtGui
+from PySide2 import QtGui, QtWidgets, QtCore
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDialog
@@ -42,6 +42,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         """
         # Put your execute step code here before calling the '_doneExecution' method.
         # os.path.join(self._location, self._config['identifier'])
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         output_dir = self._config['outputDir'] if os.path.isabs(self._config['outputDir']) else os.path.join(self._location, self._config['outputDir'])
         output_dir = os.path.realpath(output_dir)
         if self._config['exportType'] == 'webgl':
@@ -65,6 +66,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         if self._config['exportType'] == 'webgl':
             pass
         self._doneExecution()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
     def setPortData(self, index, dataIn):
         """
