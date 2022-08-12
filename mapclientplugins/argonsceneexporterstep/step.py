@@ -62,6 +62,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
             "finishTime": finish_time,
         })
         self._model.export()
+        if self._config['exportType'] == 'webgl':
+            pass
         self._doneExecution()
 
     def setPortData(self, index, dataIn):
