@@ -5,7 +5,7 @@ import os
 import sys
 
 
-FILE_SIZE_LIMIT = 1024 * 11
+FILE_SIZE_LIMIT = 1024 * 1024* 18
 
 # Threejs face types.
 THREEJS_TYPE_TRIANGLE = 0
@@ -133,7 +133,8 @@ def _split_file(big_file, splits_required):
                 face_morph_colour_map = {}
 
         # Mop up any remaining bit and pieces.
-        split_faces.append(current_faces[:])
+        if len(current_faces):
+            split_faces.append(current_faces[:])
         if len(current_vertices):
             split_vertices.append(current_vertices[:])
         if len(current_normals):
@@ -256,7 +257,7 @@ def main():
     if not os.path.isfile(args.webgl_meta):
         sys.exit(3)
 
-    split_webgl_output(args.webgl_meta, FILE_SIZE_LIMIT)
+    split_webgl_output(args.webgl_meta, FILE_SIZE_LIMIT, args.delete)
 
 
 if __name__ == "__main__":
