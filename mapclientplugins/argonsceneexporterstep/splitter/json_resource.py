@@ -59,16 +59,6 @@ def _split_file(big_file, splits_required):
         print("Help, can only deal with faces!!!")
     else:
 
-        # enum ThreejsType
-        # {
-        # 	THREEJS_TYPE_TRIANGLE = 0,
-        # 	THREEJS_TYPE_MATERIAL = 2,
-        # 	THREEJS_TYPE_VERTEX_TEX_COORD = 8,
-        # 	THREEJS_TYPE_VERTEX_NORMAL = 32,
-        # 	THREEJS_TYPE_FACE_COLOR = 64,
-        # 	THREEJS_TYPE_VERTEX_COLOR = 128
-        # };
-
         faces = large_content["faces"]
         index = 0
         split_faces = []
@@ -219,7 +209,7 @@ def _parse_arguments():
     return parser.parse_args()
 
 
-def split_webgl_output(meta_file, file_size_limit):
+def split_webgl_output(meta_file, file_size_limit, delete_split_source=False):
     with open(meta_file) as f:
         meta_content = json.load(f)
 
@@ -242,9 +232,11 @@ def split_webgl_output(meta_file, file_size_limit):
         splits_required = math.ceil(size / file_size_limit)
         split_files = _split_file(big_file, splits_required)
         new_meta_content = _replace_big_file(new_meta_content, split_files, big_file["URL"])
+        if delete_split_source:
+            os.remove(big_file["full_path"])
 
-    split_meta_file = os.path.join(meta_dir, 'split_' + os.path.basename(meta_file))
-    with open(split_meta_file, 'w') as f:
+    # split_meta_file = os.path.join(meta_dir, 'split_' + os.path.basename(meta_file))
+    with open(meta_file, 'w') as f:
         json.dump(new_meta_content, f, indent=4)
 
 

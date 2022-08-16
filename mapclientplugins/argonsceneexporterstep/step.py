@@ -8,6 +8,8 @@ from PySide2 import QtGui, QtWidgets, QtCore
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDialog
+from mapclientplugins.argonsceneexporterstep.splitter.utilities import convert_to_bytes
+from mapclientplugins.argonsceneexporterstep.splitter.json_resource import split_webgl_output
 
 from opencmiss.exporter.webgl import ArgonSceneExporter as WebGLExporter
 from opencmiss.exporter.thumbnail import ArgonSceneExporter as ThumbnailExporter
@@ -33,7 +35,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Config:
         self._config = {'identifier': '', 'exportType': 'webgl', 'prefix': '',
                         'timeSteps': '', 'initialTime': '', 'finishTime': '',
-                        'outputDir': '', 'fileSize': '18 MiB', 'splitFiles': False}
+                        'outputDir': '', 'splitSize': '18 MiB', 'splitFiles': False}
         self._model = None
 
     def execute(self):
@@ -67,8 +69,12 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
 
         self._model.export()
         if self._config['exportType'] == 'webgl':
-            print("check config")
-            print(self._config)
+            if self._config['splitFiles']:
+                print("check config")
+                print('split files')
+                split_size = convert_to_bytes(self._config['splitSize'])
+                print(self._model.metadata_file(), split_size)
+                split_webgl_output(self._model.metadata_file(), split_size, True)
         self._doneExecution()
         QtWidgets.QApplication.restoreOverrideCursor()
 
