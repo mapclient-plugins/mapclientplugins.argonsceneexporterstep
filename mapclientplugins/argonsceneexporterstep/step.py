@@ -62,6 +62,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
             "initialTime": initial_time,
             "finishTime": finish_time,
         })
+
         self._model.export()
         if self._config['exportType'] == 'webgl':
             pass
