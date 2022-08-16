@@ -71,7 +71,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         if self._config['exportType'] == 'webgl':
             if self._config['splitFiles']:
                 split_size = convert_to_bytes(self._config['splitSize'])
-                split_webgl_output(self._model.metadata_file(), split_size, True)
+                if split_size != -1:
+                    split_webgl_output(self._model.metadata_file(), split_size, True)
         self._doneExecution()
         QtWidgets.QApplication.restoreOverrideCursor()
 
