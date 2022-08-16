@@ -31,7 +31,9 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Port data:
         self._document = None  # https://opencmiss.org/1.0/rdf-schema#ArgonDocument
         # Config:
-        self._config = {'identifier': '', 'exportType': 'webgl', 'prefix': '', 'timeSteps': '', 'initialTime': '', 'finishTime': '', 'outputDir': ''}
+        self._config = {'identifier': '', 'exportType': 'webgl', 'prefix': '',
+                        'timeSteps': '', 'initialTime': '', 'finishTime': '',
+                        'outputDir': '', 'fileSize': '18 MiB', 'splitFiles': False}
         self._model = None
 
     def execute(self):
@@ -65,7 +67,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
 
         self._model.export()
         if self._config['exportType'] == 'webgl':
-            pass
+            print("check config")
+            print(self._config)
         self._doneExecution()
         QtWidgets.QApplication.restoreOverrideCursor()
 
