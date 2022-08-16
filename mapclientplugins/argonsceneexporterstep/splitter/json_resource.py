@@ -58,7 +58,6 @@ def _split_file(big_file, splits_required):
     if faces_len == 0:
         print("Help, can only deal with faces!!!")
     else:
-
         faces = large_content["faces"]
         index = 0
         split_faces = []
@@ -132,6 +131,17 @@ def _split_file(big_file, splits_required):
                 face_normal_map = {}
                 face_colour_map = {}
                 face_morph_colour_map = {}
+
+        # Mop up any remaining bit and pieces.
+        split_faces.append(current_faces[:])
+        if len(current_vertices):
+            split_vertices.append(current_vertices[:])
+        if len(current_normals):
+            split_normals.append(current_normals[:])
+        if len(current_colours):
+            split_colours.append(current_colours[:])
+        if len(current_morph_colours):
+            split_morph_colours.append(current_morph_colours.copy())
 
         for chunk_index, split_face_values in enumerate(split_faces):
             split_data = common_items.copy()
