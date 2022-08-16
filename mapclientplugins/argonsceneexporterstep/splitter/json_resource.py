@@ -175,7 +175,7 @@ def _list_in(a, b):
     return -1
 
 
-def _map_values(current_values, value_map, source_triple, value_store, size=3, print_=False):
+def _map_values(current_values, value_map, source_triple, value_store, size=3):
     """
     Map a triple from the main value_store to the current_values.
     Adding to the current_values from the value_store if a mapped value is not available.
@@ -219,7 +219,7 @@ def _parse_arguments():
     return parser.parse_args()
 
 
-def split_webgl_output(meta_file):
+def split_webgl_output(meta_file, file_size_limit):
     with open(meta_file) as f:
         meta_content = json.load(f)
 
@@ -229,7 +229,7 @@ def split_webgl_output(meta_file):
         if "URL" in item:
             resource = os.path.join(meta_dir, item["URL"])
             file_stats = os.stat(resource)
-            if file_stats.st_size > FILE_SIZE_LIMIT:
+            if file_stats.st_size > file_size_limit:
                 big_files.append({
                     "URL": item["URL"],
                     "full_path": resource,
@@ -239,7 +239,7 @@ def split_webgl_output(meta_file):
     new_meta_content = meta_content.copy()
     for big_file in big_files:
         size = big_file["size"]
-        splits_required = math.ceil(size / FILE_SIZE_LIMIT)
+        splits_required = math.ceil(size / file_size_limit)
         split_files = _split_file(big_file, splits_required)
         new_meta_content = _replace_big_file(new_meta_content, split_files, big_file["URL"])
 
@@ -254,7 +254,7 @@ def main():
     if not os.path.isfile(args.webgl_meta):
         sys.exit(3)
 
-    split_webgl_output(args.webgl_meta)
+    split_webgl_output(args.webgl_meta, FILE_SIZE_LIMIT)
 
 
 if __name__ == "__main__":
