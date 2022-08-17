@@ -5,7 +5,7 @@ import os
 import sys
 
 
-FILE_SIZE_LIMIT = 1024 * 1024* 18
+FILE_SIZE_LIMIT = 1024 * 1024 * 18
 
 # Threejs face types.
 THREEJS_TYPE_TRIANGLE = 0
