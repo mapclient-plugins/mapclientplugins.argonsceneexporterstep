@@ -83,15 +83,20 @@ def _split_file(big_file, splits_required):
             if face_mask == THREEJS_TYPE_VERTEX_NORMAL:
                 mask_size = 7
                 current_faces.append(faces[index])
-                current_faces.extend(_map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
-                current_faces.extend(_map_values(current_normals, face_normal_map, faces[index + 4: index + 7], normals))
+                current_faces.extend(
+                    _map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
+                current_faces.extend(
+                    _map_values(current_normals, face_normal_map, faces[index + 4: index + 7], normals))
                 index += mask_size
             elif face_mask == (THREEJS_TYPE_VERTEX_NORMAL + THREEJS_TYPE_VERTEX_COLOR):
                 mask_size = 10
                 current_faces.append(faces[index])
-                current_faces.extend(_map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
-                current_faces.extend(_map_values(current_normals, face_normal_map, faces[index + 4: index + 7], normals))
-                current_faces.extend(_map_values(current_colours, face_colour_map, faces[index + 7: index + 10], colours, size=1))
+                current_faces.extend(
+                    _map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
+                current_faces.extend(
+                    _map_values(current_normals, face_normal_map, faces[index + 4: index + 7], normals))
+                current_faces.extend(
+                    _map_values(current_colours, face_colour_map, faces[index + 7: index + 10], colours, size=1))
                 for source_value in faces[index + 7: index + 10]:
                     if source_value not in face_morph_colour_map:
 
@@ -104,6 +109,12 @@ def _split_file(big_file, splits_required):
                             value = morph_colour["colors"][source_value]
                             current_morph_colours[index_colour]["colors"].append(value)
 
+                index += mask_size
+            elif face_mask == THREEJS_TYPE_TRIANGLE:
+                mask_size = 4
+                current_faces.append(faces[index])
+                current_faces.append(
+                    _map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
                 index += mask_size
             else:
                 raise Exception(f"Cannot handle face mask: {face_mask}.")
