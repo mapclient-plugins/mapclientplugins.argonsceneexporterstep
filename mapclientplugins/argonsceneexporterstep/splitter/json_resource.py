@@ -60,6 +60,7 @@ def _split_file(big_file, splits_required):
     else:
         faces = large_content["faces"]
         index = 0
+        chunk_progress = 0
         split_faces = []
         split_vertices = []
         split_normals = []
@@ -88,6 +89,7 @@ def _split_file(big_file, splits_required):
                 current_faces.extend(
                     _map_values(current_normals, face_normal_map, faces[index + 4: index + 7], normals))
                 index += mask_size
+                chunk_progress += mask_size
             elif face_mask == (THREEJS_TYPE_VERTEX_NORMAL + THREEJS_TYPE_VERTEX_COLOR):
                 mask_size = 10
                 current_faces.append(faces[index])
@@ -110,17 +112,20 @@ def _split_file(big_file, splits_required):
                             current_morph_colours[index_colour]["colors"].append(value)
 
                 index += mask_size
+                chunk_progress += mask_size
             elif face_mask == THREEJS_TYPE_TRIANGLE:
                 mask_size = 4
                 current_faces.append(faces[index])
                 current_faces.append(
                     _map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
                 index += mask_size
+                chunk_progress += mask_size
             else:
                 raise Exception(f"Cannot handle face mask: {face_mask}.")
 
-            if len(current_faces) >= chunk_size:
-                split_faces.append(current_faces[:])
+            if chunk_progress >= chunk_size:
+                if len(current_faces):
+                    split_faces.append(current_faces[:])
                 if len(current_vertices):
                     split_vertices.append(current_vertices[:])
                 if len(current_normals):
@@ -130,6 +135,7 @@ def _split_file(big_file, splits_required):
                 if len(current_morph_colours):
                     split_morph_colours.append(current_morph_colours.copy())
 
+                chunk_progress = 0
                 current_faces = []
                 current_vertices = []
                 current_normals = []
@@ -143,7 +149,7 @@ def _split_file(big_file, splits_required):
                 face_colour_map = {}
                 face_morph_colour_map = {}
 
-        # Mop up any remaining bit and pieces.
+        # Mop up any remaining bits and pieces.
         if len(current_faces):
             split_faces.append(current_faces[:])
         if len(current_vertices):
