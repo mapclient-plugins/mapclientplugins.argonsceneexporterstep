@@ -13,6 +13,7 @@ from mapclientplugins.argonsceneexporterstep.splitter.json_resource import split
 
 from opencmiss.exporter.webgl import ArgonSceneExporter as WebGLExporter
 from opencmiss.exporter.thumbnail import ArgonSceneExporter as ThumbnailExporter
+from opencmiss.exporter.image import ArgonSceneExporter as ImageExporter
 
 
 class ArgonSceneExporterStep(WorkflowStepMountPoint):
@@ -53,6 +54,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
             self._model = WebGLExporter(output_dir)
         elif self._config['exportType'] == 'thumbnail':
             self._model = ThumbnailExporter(output_dir)
+        elif self._config['exportType'] == 'image':
+            self._model = ImageExporter(self._config['width'], self._config['height'], output_dir)
         else:
             raise NotImplementedError('Current export type selection is not implemented.')
 

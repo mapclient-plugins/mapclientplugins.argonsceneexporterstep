@@ -33,22 +33,21 @@ class ConfigureDialog(QtWidgets.QDialog):
         self.setWhatsThis('<html>Please read the documentation available \n<a href="https://abi-mapping-tools.readthedocs.io/en/latest/mapclientplugins.argonsceneexporterstep/docs/index.html">here</a> for further details.</html>')
 
         self._update_ui()
-        self._makeConnections()
+        self._make_connections()
 
     def event(self, e):
         if e.type() == QtCore.QEvent.Type.WhatsThisClicked:
             webbrowser.open(e.href())
         return super().event(e)
 
-    def _makeConnections(self):
+    def _make_connections(self):
         self._ui.lineEditIdentifier.textChanged.connect(self.validate)
         self._ui.pushButtonOutputDirectory.clicked.connect(self._directory_chooser_clicked)
         self._ui.comboBoxExportType.currentTextChanged.connect(self._update_ui)
 
     def _update_ui(self):
-        enabled = self._ui.comboBoxExportType.currentText() == 'webgl'
-        self._ui.checkBoxSplitWebGLOutput.setEnabled(enabled)
-        self._ui.splitMaxSize_lineEdit.setEnabled(enabled)
+        current_index = self._ui.comboBoxExportType.currentIndex()
+        self._ui.stackedWidget.setCurrentIndex(current_index)
 
     def _output_location(self, location=None):
         if location is None:
@@ -117,7 +116,8 @@ class ConfigureDialog(QtWidgets.QDialog):
         config = {'identifier': self._ui.lineEditIdentifier.text(), 'prefix': self._ui.prefix_lineEdit.text(), 'timeSteps': self._ui.timeSteps_lineEdit.text(),
                   'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(),
                   'outputDir': self._output_location(), 'exportType': self._ui.comboBoxExportType.currentText(),
-                  'splitFiles': self._ui.checkBoxSplitWebGLOutput.isChecked(), 'splitSize': self._ui.splitMaxSize_lineEdit.text()}
+                  'splitFiles': self._ui.checkBoxSplitWebGLOutput.isChecked(), 'splitSize': self._ui.splitMaxSize_lineEdit.text(),
+                  'width': self._ui.spinBoxWidth.value(), 'height': self._ui.spinBoxHeight.value()}
         if self._previousLocation:
             config['previous_location'] = os.path.relpath(self._previousLocation, self._workflow_location)
         else:
@@ -140,6 +140,8 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._ui.comboBoxExportType.setCurrentText(config['exportType'])
         self._ui.splitMaxSize_lineEdit.setText(config.get('splitSize', '18 MiB'))
         self._ui.checkBoxSplitWebGLOutput.setChecked(config.get('splitFiles', False))
+        self._ui.spinBoxWidth.setValue(config.get('width', 512))
+        self._ui.spinBoxHeight.setValue(config.get('height', 512))
         if 'outputDir' in config:
             self._ui.lineEditOutputDirectory.setText(config['outputDir'])
         if 'previous_location' in config:

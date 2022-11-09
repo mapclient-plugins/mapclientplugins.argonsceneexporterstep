@@ -17,67 +17,37 @@ class Ui_ConfigureDialog(object):
     def setupUi(self, ConfigureDialog):
         if not ConfigureDialog.objectName():
             ConfigureDialog.setObjectName(u"ConfigureDialog")
-        ConfigureDialog.resize(509, 366)
-        self.gridLayout = QGridLayout(ConfigureDialog)
-        self.gridLayout.setObjectName(u"gridLayout")
+        ConfigureDialog.resize(354, 440)
+        self.verticalLayout = QVBoxLayout(ConfigureDialog)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.configGroupBox = QGroupBox(ConfigureDialog)
         self.configGroupBox.setObjectName(u"configGroupBox")
-        self.formLayout = QFormLayout(self.configGroupBox)
-        self.formLayout.setObjectName(u"formLayout")
+        self.formLayout_3 = QFormLayout(self.configGroupBox)
+        self.formLayout_3.setObjectName(u"formLayout_3")
         self.label0 = QLabel(self.configGroupBox)
         self.label0.setObjectName(u"label0")
 
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label0)
+        self.formLayout_3.setWidget(0, QFormLayout.LabelRole, self.label0)
 
         self.lineEditIdentifier = QLineEdit(self.configGroupBox)
         self.lineEditIdentifier.setObjectName(u"lineEditIdentifier")
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.lineEditIdentifier)
+        self.formLayout_3.setWidget(0, QFormLayout.FieldRole, self.lineEditIdentifier)
 
         self.label_3 = QLabel(self.configGroupBox)
         self.label_3.setObjectName(u"label_3")
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_3)
+        self.formLayout_3.setWidget(1, QFormLayout.LabelRole, self.label_3)
 
         self.prefix_lineEdit = QLineEdit(self.configGroupBox)
         self.prefix_lineEdit.setObjectName(u"prefix_lineEdit")
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.prefix_lineEdit)
-
-        self.label_4 = QLabel(self.configGroupBox)
-        self.label_4.setObjectName(u"label_4")
-
-        self.formLayout.setWidget(5, QFormLayout.LabelRole, self.label_4)
-
-        self.timeSteps_lineEdit = QLineEdit(self.configGroupBox)
-        self.timeSteps_lineEdit.setObjectName(u"timeSteps_lineEdit")
-
-        self.formLayout.setWidget(5, QFormLayout.FieldRole, self.timeSteps_lineEdit)
-
-        self.label = QLabel(self.configGroupBox)
-        self.label.setObjectName(u"label")
-
-        self.formLayout.setWidget(6, QFormLayout.LabelRole, self.label)
-
-        self.initialTime_lineEdit = QLineEdit(self.configGroupBox)
-        self.initialTime_lineEdit.setObjectName(u"initialTime_lineEdit")
-
-        self.formLayout.setWidget(6, QFormLayout.FieldRole, self.initialTime_lineEdit)
-
-        self.label_2 = QLabel(self.configGroupBox)
-        self.label_2.setObjectName(u"label_2")
-
-        self.formLayout.setWidget(7, QFormLayout.LabelRole, self.label_2)
-
-        self.finishTime_lineEdit = QLineEdit(self.configGroupBox)
-        self.finishTime_lineEdit.setObjectName(u"finishTime_lineEdit")
-
-        self.formLayout.setWidget(7, QFormLayout.FieldRole, self.finishTime_lineEdit)
+        self.formLayout_3.setWidget(1, QFormLayout.FieldRole, self.prefix_lineEdit)
 
         self.label1 = QLabel(self.configGroupBox)
         self.label1.setObjectName(u"label1")
 
-        self.formLayout.setWidget(8, QFormLayout.LabelRole, self.label1)
+        self.formLayout_3.setWidget(2, QFormLayout.LabelRole, self.label1)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -92,51 +62,123 @@ class Ui_ConfigureDialog(object):
         self.horizontalLayout.addWidget(self.pushButtonOutputDirectory)
 
 
-        self.formLayout.setLayout(8, QFormLayout.FieldRole, self.horizontalLayout)
+        self.formLayout_3.setLayout(2, QFormLayout.FieldRole, self.horizontalLayout)
 
         self.label_5 = QLabel(self.configGroupBox)
         self.label_5.setObjectName(u"label_5")
 
-        self.formLayout.setWidget(2, QFormLayout.LabelRole, self.label_5)
+        self.formLayout_3.setWidget(3, QFormLayout.LabelRole, self.label_5)
 
         self.comboBoxExportType = QComboBox(self.configGroupBox)
         self.comboBoxExportType.addItem("")
         self.comboBoxExportType.addItem("")
+        self.comboBoxExportType.addItem("")
         self.comboBoxExportType.setObjectName(u"comboBoxExportType")
 
-        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.comboBoxExportType)
+        self.formLayout_3.setWidget(3, QFormLayout.FieldRole, self.comboBoxExportType)
 
-        self.label_6 = QLabel(self.configGroupBox)
-        self.label_6.setObjectName(u"label_6")
-
-        self.formLayout.setWidget(4, QFormLayout.LabelRole, self.label_6)
-
-        self.splitMaxSize_lineEdit = QLineEdit(self.configGroupBox)
-        self.splitMaxSize_lineEdit.setObjectName(u"splitMaxSize_lineEdit")
-
-        self.formLayout.setWidget(4, QFormLayout.FieldRole, self.splitMaxSize_lineEdit)
-
-        self.checkBoxSplitWebGLOutput = QCheckBox(self.configGroupBox)
+        self.stackedWidget = QStackedWidget(self.configGroupBox)
+        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.stackedWidget.setLineWidth(0)
+        self.stackedWidget.setMidLineWidth(-4)
+        self.pageWebGL = QWidget()
+        self.pageWebGL.setObjectName(u"pageWebGL")
+        self.formLayout_2 = QFormLayout(self.pageWebGL)
+        self.formLayout_2.setObjectName(u"formLayout_2")
+        self.checkBoxSplitWebGLOutput = QCheckBox(self.pageWebGL)
         self.checkBoxSplitWebGLOutput.setObjectName(u"checkBoxSplitWebGLOutput")
 
-        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.checkBoxSplitWebGLOutput)
+        self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.checkBoxSplitWebGLOutput)
+
+        self.splitMaxSize_lineEdit = QLineEdit(self.pageWebGL)
+        self.splitMaxSize_lineEdit.setObjectName(u"splitMaxSize_lineEdit")
+
+        self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.splitMaxSize_lineEdit)
+
+        self.label_6 = QLabel(self.pageWebGL)
+        self.label_6.setObjectName(u"label_6")
+
+        self.formLayout_2.setWidget(1, QFormLayout.LabelRole, self.label_6)
+
+        self.label_4 = QLabel(self.pageWebGL)
+        self.label_4.setObjectName(u"label_4")
+
+        self.formLayout_2.setWidget(2, QFormLayout.LabelRole, self.label_4)
+
+        self.label = QLabel(self.pageWebGL)
+        self.label.setObjectName(u"label")
+
+        self.formLayout_2.setWidget(3, QFormLayout.LabelRole, self.label)
+
+        self.label_2 = QLabel(self.pageWebGL)
+        self.label_2.setObjectName(u"label_2")
+
+        self.formLayout_2.setWidget(4, QFormLayout.LabelRole, self.label_2)
+
+        self.timeSteps_lineEdit = QLineEdit(self.pageWebGL)
+        self.timeSteps_lineEdit.setObjectName(u"timeSteps_lineEdit")
+
+        self.formLayout_2.setWidget(2, QFormLayout.FieldRole, self.timeSteps_lineEdit)
+
+        self.initialTime_lineEdit = QLineEdit(self.pageWebGL)
+        self.initialTime_lineEdit.setObjectName(u"initialTime_lineEdit")
+
+        self.formLayout_2.setWidget(3, QFormLayout.FieldRole, self.initialTime_lineEdit)
+
+        self.finishTime_lineEdit = QLineEdit(self.pageWebGL)
+        self.finishTime_lineEdit.setObjectName(u"finishTime_lineEdit")
+
+        self.formLayout_2.setWidget(4, QFormLayout.FieldRole, self.finishTime_lineEdit)
+
+        self.stackedWidget.addWidget(self.pageWebGL)
+        self.pageThumbnail = QWidget()
+        self.pageThumbnail.setObjectName(u"pageThumbnail")
+        self.stackedWidget.addWidget(self.pageThumbnail)
+        self.pageImage = QWidget()
+        self.pageImage.setObjectName(u"pageImage")
+        self.formLayout = QFormLayout(self.pageImage)
+        self.formLayout.setObjectName(u"formLayout")
+        self.labelWidth = QLabel(self.pageImage)
+        self.labelWidth.setObjectName(u"labelWidth")
+
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.labelWidth)
+
+        self.spinBoxWidth = QSpinBox(self.pageImage)
+        self.spinBoxWidth.setObjectName(u"spinBoxWidth")
+        self.spinBoxWidth.setMinimum(18)
+        self.spinBoxWidth.setMaximum(9999)
+        self.spinBoxWidth.setValue(512)
+
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.spinBoxWidth)
+
+        self.labelHeight = QLabel(self.pageImage)
+        self.labelHeight.setObjectName(u"labelHeight")
+
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.labelHeight)
+
+        self.spinBoxHeight = QSpinBox(self.pageImage)
+        self.spinBoxHeight.setObjectName(u"spinBoxHeight")
+        self.spinBoxHeight.setMinimum(18)
+        self.spinBoxHeight.setMaximum(9999)
+        self.spinBoxHeight.setValue(512)
+
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.spinBoxHeight)
+
+        self.stackedWidget.addWidget(self.pageImage)
+
+        self.formLayout_3.setWidget(4, QFormLayout.SpanningRole, self.stackedWidget)
 
 
-        self.gridLayout.addWidget(self.configGroupBox, 0, 0, 1, 1)
+        self.verticalLayout.addWidget(self.configGroupBox)
 
         self.buttonBox = QDialogButtonBox(ConfigureDialog)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setOrientation(Qt.Horizontal)
         self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
 
-        self.gridLayout.addWidget(self.buttonBox, 1, 0, 1, 1)
+        self.verticalLayout.addWidget(self.buttonBox)
 
-        QWidget.setTabOrder(self.lineEditIdentifier, self.prefix_lineEdit)
-        QWidget.setTabOrder(self.prefix_lineEdit, self.comboBoxExportType)
-        QWidget.setTabOrder(self.comboBoxExportType, self.timeSteps_lineEdit)
-        QWidget.setTabOrder(self.timeSteps_lineEdit, self.initialTime_lineEdit)
-        QWidget.setTabOrder(self.initialTime_lineEdit, self.finishTime_lineEdit)
-        QWidget.setTabOrder(self.finishTime_lineEdit, self.lineEditOutputDirectory)
+        QWidget.setTabOrder(self.prefix_lineEdit, self.lineEditOutputDirectory)
         QWidget.setTabOrder(self.lineEditOutputDirectory, self.pushButtonOutputDirectory)
 
         self.retranslateUi(ConfigureDialog)
@@ -144,6 +186,7 @@ class Ui_ConfigureDialog(object):
         self.buttonBox.rejected.connect(ConfigureDialog.reject)
 
         self.comboBoxExportType.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(ConfigureDialog)
@@ -152,19 +195,22 @@ class Ui_ConfigureDialog(object):
     def retranslateUi(self, ConfigureDialog):
         ConfigureDialog.setWindowTitle(QCoreApplication.translate("ConfigureDialog", u"Configure Argon Scene Exporter", None))
         self.configGroupBox.setTitle("")
-        self.label0.setText(QCoreApplication.translate("ConfigureDialog", u"identifier:  ", None))
+        self.label0.setText(QCoreApplication.translate("ConfigureDialog", u"Identifier:  ", None))
         self.label_3.setText(QCoreApplication.translate("ConfigureDialog", u"Prefix : ", None))
-        self.label_4.setText(QCoreApplication.translate("ConfigureDialog", u"Time Steps : ", None))
-        self.label.setText(QCoreApplication.translate("ConfigureDialog", u"Initial Time (s) : ", None))
-        self.label_2.setText(QCoreApplication.translate("ConfigureDialog", u"Finish Time (s) : ", None))
         self.label1.setText(QCoreApplication.translate("ConfigureDialog", u"Output directory:", None))
         self.pushButtonOutputDirectory.setText(QCoreApplication.translate("ConfigureDialog", u"...", None))
         self.label_5.setText(QCoreApplication.translate("ConfigureDialog", u"Export type:", None))
         self.comboBoxExportType.setItemText(0, QCoreApplication.translate("ConfigureDialog", u"webgl", None))
         self.comboBoxExportType.setItemText(1, QCoreApplication.translate("ConfigureDialog", u"thumbnail", None))
+        self.comboBoxExportType.setItemText(2, QCoreApplication.translate("ConfigureDialog", u"image", None))
 
-        self.label_6.setText(QCoreApplication.translate("ConfigureDialog", u"Split files greater than:", None))
-        self.splitMaxSize_lineEdit.setText(QCoreApplication.translate("ConfigureDialog", u"18MiB", None))
         self.checkBoxSplitWebGLOutput.setText(QCoreApplication.translate("ConfigureDialog", u"Split webGL output", None))
+        self.splitMaxSize_lineEdit.setText(QCoreApplication.translate("ConfigureDialog", u"18MiB", None))
+        self.label_6.setText(QCoreApplication.translate("ConfigureDialog", u"Split files greater than:", None))
+        self.label_4.setText(QCoreApplication.translate("ConfigureDialog", u"Time Steps : ", None))
+        self.label.setText(QCoreApplication.translate("ConfigureDialog", u"Initial Time (s) : ", None))
+        self.label_2.setText(QCoreApplication.translate("ConfigureDialog", u"Finish Time (s) : ", None))
+        self.labelWidth.setText(QCoreApplication.translate("ConfigureDialog", u"Width:", None))
+        self.labelHeight.setText(QCoreApplication.translate("ConfigureDialog", u"Height:", None))
     # retranslateUi
 
