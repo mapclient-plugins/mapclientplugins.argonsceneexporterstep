@@ -1,16 +1,30 @@
-MAP Client Plugin - Argon Scene Exporter
-========================================
+Argon Scene Exporter
+====================
+
+Overview
+--------
 
 The **Argon Scene Exporter** is a MAP Client plugin for exporting an Argon scene.
-The plugin uses an Argon document (step uses port definition: https://opencmiss.org/1.0/rdf-schema#ArgonDocument) as an input.
+The plugin uses an Argon document as an input.
 The plugin can be configured to export the scene to either webGL or a JPEG thumbnail.
 
-.. _fig-mcp-argon-scene-exporter-un-configured-step:
+Workflow Connections
+--------------------
 
-.. figure:: _images/un-configured-step.png
-   :alt: Un-configured step icon
+As shown in :numref:`fig-mcp-argon-scene-exporter-workflow-connections`, the **Argon Scene Exporter** uses 1 input:
 
-   An un-configured Argon scene exporter step.
+1. An Argon Document from a **Argon Viewer** or other plugin. (Port: *https://opencmiss.org/1.0/rdf-schema#ArgonDocument*) 
+
+It does not have a output port, the output of this plugin will be generated in the folder set in config.
+
+.. _fig-mcp-argon-scene-exporter-workflow-connections:
+
+.. figure:: _images/workflow-connections.png
+   :alt: Argon Scene Exporter workflow connections.
+   :align: center
+   :figwidth: 75%
+
+   **Argon Scene Exporter** workflow connections.¶
 
 Configure
 ---------
@@ -40,12 +54,3 @@ The *Finish Time* parameter, is the final time to export the scene to.
 
 The *Time Steps*, *Initial Time*, and *Finish Time* are only appropriate for time varying scenes.
 If the scene is not time varying these parameters are ignored.
-
-Ports
------
-
-This plugin:
-
-* **uses**:
-
-  * *https://opencmiss.org/1.0/rdf-schema#ArgonDocument*
