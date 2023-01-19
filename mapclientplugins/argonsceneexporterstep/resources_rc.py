@@ -1,9 +1,9 @@
 # Resource object code (Python 3)
 # Created by: object code
-# Created by: The Resource Compiler for Qt version 5.15.2
+# Created by: The Resource Compiler for Qt version 6.4.1
 # WARNING! All changes made in this file will be lost!
 
-from PySide2 import QtCore
+from PySide6 import QtCore
 
 qt_resource_data = b"\
 \x00\x00\x0b&\
@@ -213,7 +213,7 @@ qt_resource_struct = b"\
 \x00\x00\x002\x00\x02\x00\x00\x00\x01\x00\x00\x00\x03\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x00D\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\
-\x00\x00\x01|3\xe6H\xcf\
+\x00\x00\x01\x85\xc7Ur\x0b\
 "
 
 def qInitResources():

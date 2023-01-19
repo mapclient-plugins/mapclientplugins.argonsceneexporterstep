@@ -1,7 +1,7 @@
 import os
 import webbrowser
 
-from PySide2 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets
 from mapclientplugins.argonsceneexporterstep.ui_configuredialog import Ui_ConfigureDialog
 
 INVALID_STYLE_SHEET = 'background-color: rgba(239, 0, 0, 50)'
