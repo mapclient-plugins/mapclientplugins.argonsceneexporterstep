@@ -11,9 +11,9 @@ from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDia
 from mapclientplugins.argonsceneexporterstep.splitter.utilities import convert_to_bytes
 from mapclientplugins.argonsceneexporterstep.splitter.json_resource import split_webgl_output
 
-from opencmiss.exporter.webgl import ArgonSceneExporter as WebGLExporter
-from opencmiss.exporter.thumbnail import ArgonSceneExporter as ThumbnailExporter
-from opencmiss.exporter.image import ArgonSceneExporter as ImageExporter
+from cmlibs.exporter.webgl import ArgonSceneExporter as WebGLExporter
+from cmlibs.exporter.thumbnail import ArgonSceneExporter as ThumbnailExporter
+from cmlibs.exporter.image import ArgonSceneExporter as ImageExporter
 
 
 class ArgonSceneExporterStep(WorkflowStepMountPoint):
