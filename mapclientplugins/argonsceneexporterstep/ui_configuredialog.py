@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QComboBox,
-    QDialog, QDialogButtonBox, QFormLayout, QGridLayout,
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QSizePolicy, QWidget)
+                               QDialog, QDialogButtonBox, QFormLayout, QGridLayout,
+                               QGroupBox, QHBoxLayout, QLabel, QLineEdit,
+                               QPushButton, QSizePolicy, QWidget, QVBoxLayout, QStackedWidget, QSpinBox)
 
 class Ui_ConfigureDialog(object):
     def setupUi(self, ConfigureDialog):
