@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'configuredialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.1
+## Created by: Qt User Interface Compiler version 6.4.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,9 +16,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QComboBox,
-                               QDialog, QDialogButtonBox, QFormLayout, QGridLayout,
-                               QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-                               QPushButton, QSizePolicy, QWidget, QVBoxLayout, QStackedWidget, QSpinBox)
+    QDialog, QDialogButtonBox, QFormLayout, QGroupBox,
+    QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QSizePolicy, QSpinBox, QStackedWidget, QVBoxLayout,
+    QWidget)
 
 class Ui_ConfigureDialog(object):
     def setupUi(self, ConfigureDialog):
@@ -80,6 +81,9 @@ class Ui_ConfigureDialog(object):
         self.comboBoxExportType.addItem("")
         self.comboBoxExportType.addItem("")
         self.comboBoxExportType.addItem("")
+        self.comboBoxExportType.addItem("")
+        self.comboBoxExportType.addItem("")
+        self.comboBoxExportType.addItem("")
         self.comboBoxExportType.setObjectName(u"comboBoxExportType")
 
         self.formLayout_3.setWidget(3, QFormLayout.FieldRole, self.comboBoxExportType)
@@ -138,6 +142,15 @@ class Ui_ConfigureDialog(object):
         self.formLayout_2.setWidget(4, QFormLayout.FieldRole, self.finishTime_lineEdit)
 
         self.stackedWidget.addWidget(self.pageWebGL)
+        self.pageVTK = QWidget()
+        self.pageVTK.setObjectName(u"pageVTK")
+        self.stackedWidget.addWidget(self.pageVTK)
+        self.pageWavefront = QWidget()
+        self.pageWavefront.setObjectName(u"pageWavefront")
+        self.stackedWidget.addWidget(self.pageWavefront)
+        self.pageSTL = QWidget()
+        self.pageSTL.setObjectName(u"pageSTL")
+        self.stackedWidget.addWidget(self.pageSTL)
         self.pageThumbnail = QWidget()
         self.pageThumbnail.setObjectName(u"pageThumbnail")
         self.stackedWidget.addWidget(self.pageThumbnail)
@@ -208,8 +221,11 @@ class Ui_ConfigureDialog(object):
         self.pushButtonOutputDirectory.setText(QCoreApplication.translate("ConfigureDialog", u"...", None))
         self.label_5.setText(QCoreApplication.translate("ConfigureDialog", u"Export type:", None))
         self.comboBoxExportType.setItemText(0, QCoreApplication.translate("ConfigureDialog", u"webgl", None))
-        self.comboBoxExportType.setItemText(1, QCoreApplication.translate("ConfigureDialog", u"thumbnail", None))
-        self.comboBoxExportType.setItemText(2, QCoreApplication.translate("ConfigureDialog", u"image", None))
+        self.comboBoxExportType.setItemText(1, QCoreApplication.translate("ConfigureDialog", u"vtk", None))
+        self.comboBoxExportType.setItemText(2, QCoreApplication.translate("ConfigureDialog", u"wavefront", None))
+        self.comboBoxExportType.setItemText(3, QCoreApplication.translate("ConfigureDialog", u"stl", None))
+        self.comboBoxExportType.setItemText(4, QCoreApplication.translate("ConfigureDialog", u"thumbnail", None))
+        self.comboBoxExportType.setItemText(5, QCoreApplication.translate("ConfigureDialog", u"image", None))
 
         self.checkBoxSplitWebGLOutput.setText(QCoreApplication.translate("ConfigureDialog", u"Split webGL output", None))
         self.splitMaxSize_lineEdit.setText(QCoreApplication.translate("ConfigureDialog", u"18MiB", None))

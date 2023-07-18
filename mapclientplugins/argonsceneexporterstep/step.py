@@ -12,6 +12,9 @@ from mapclientplugins.argonsceneexporterstep.splitter.utilities import convert_t
 from mapclientplugins.argonsceneexporterstep.splitter.json_resource import split_webgl_output
 
 from cmlibs.exporter.webgl import ArgonSceneExporter as WebGLExporter
+from cmlibs.exporter.vtk import ArgonSceneExporter as VTKExporter
+from cmlibs.exporter.wavefront import ArgonSceneExporter as WavefrontExporter
+from cmlibs.exporter.stl import ArgonSceneExporter as STLExporter
 from cmlibs.exporter.thumbnail import ArgonSceneExporter as ThumbnailExporter
 from cmlibs.exporter.image import ArgonSceneExporter as ImageExporter
 
@@ -52,6 +55,12 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         output_dir = os.path.realpath(output_dir)
         if self._config['exportType'] == 'webgl':
             self._model = WebGLExporter(output_dir)
+        if self._config['exportType'] == 'vtk':
+            self._model = VTKExporter(output_dir)
+        if self._config['exportType'] == 'wavefront':
+            self._model = WavefrontExporter(output_dir)
+        if self._config['exportType'] == 'stl':
+            self._model = STLExporter(output_dir)
         elif self._config['exportType'] == 'thumbnail':
             self._model = ThumbnailExporter(output_dir)
         elif self._config['exportType'] == 'image':

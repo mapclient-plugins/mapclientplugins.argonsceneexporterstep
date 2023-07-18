@@ -80,6 +80,21 @@
         </item>
         <item>
          <property name="text">
+          <string>vtk</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>wavefront</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>stl</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>thumbnail</string>
          </property>
         </item>
@@ -156,6 +171,9 @@
           </item>
          </layout>
         </widget>
+        <widget class="QWidget" name="pageVTK"/>
+        <widget class="QWidget" name="pageWavefront"/>
+        <widget class="QWidget" name="pageSTL"/>
         <widget class="QWidget" name="pageThumbnail"/>
         <widget class="QWidget" name="pageImage">
          <layout class="QFormLayout" name="formLayout">
