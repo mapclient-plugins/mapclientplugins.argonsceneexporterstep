@@ -34,6 +34,9 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
                       'https://opencmiss.org/1.0/rdf-schema#ArgonDocument'))
+        self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
+                      'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
+                      'http://physiomeproject.org/workflow/1.0/rdf-schema#directory_location'))
         # Port data:
         self._document = None  # https://opencmiss.org/1.0/rdf-schema#ArgonDocument
         # Config:
@@ -50,43 +53,45 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         """
         # Put your execute step code here before calling the '_doneExecution' method.
         # os.path.join(self._location, self._config['identifier'])
-        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-        output_dir = self._config['outputDir'] if os.path.isabs(self._config['outputDir']) else os.path.join(self._location, self._config['outputDir'])
-        output_dir = os.path.realpath(output_dir)
-        if self._config['exportType'] == 'webgl':
-            self._model = WebGLExporter(output_dir)
-        elif self._config['exportType'] == 'vtk':
-            self._model = VTKExporter(output_dir)
-        elif self._config['exportType'] == 'wavefront':
-            self._model = WavefrontExporter(output_dir)
-        elif self._config['exportType'] == 'stl':
-            self._model = STLExporter(output_dir)
-        elif self._config['exportType'] == 'thumbnail':
-            self._model = ThumbnailExporter(output_dir)
-        elif self._config['exportType'] == 'image':
-            self._model = ImageExporter(self._config['width'], self._config['height'], output_dir)
-        else:
-            raise NotImplementedError('Current export type selection is not implemented.')
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.CursorShape.WaitCursor)
+        try:
+            output_dir = self._config['outputDir'] if os.path.isabs(self._config['outputDir']) else os.path.join(self._location, self._config['outputDir'])
+            output_dir = os.path.realpath(output_dir)
+            if self._config['exportType'] == 'webgl':
+                self._model = WebGLExporter(output_dir)
+            elif self._config['exportType'] == 'vtk':
+                self._model = VTKExporter(output_dir)
+            elif self._config['exportType'] == 'wavefront':
+                self._model = WavefrontExporter(output_dir)
+            elif self._config['exportType'] == 'stl':
+                self._model = STLExporter(output_dir)
+            elif self._config['exportType'] == 'thumbnail':
+                self._model = ThumbnailExporter(output_dir)
+            elif self._config['exportType'] == 'image':
+                self._model = ImageExporter(self._config['width'], self._config['height'], output_dir)
+            else:
+                raise NotImplementedError('Current export type selection is not implemented.')
 
-        self._model.set_document(self._document)
-        number_of_time_steps = int(self._config['timeSteps']) if self._config['timeSteps'] else None
-        initial_time = float(self._config['initialTime']) if self._config['initialTime'] else None
-        finish_time = float(self._config['finishTime']) if self._config['finishTime'] else None
-        self._model.set_parameters({
-            "prefix": self._config['prefix'],
-            "numberOfTimeSteps": number_of_time_steps,
-            "initialTime": initial_time,
-            "finishTime": finish_time,
-        })
+            self._model.set_document(self._document)
+            number_of_time_steps = int(self._config['timeSteps']) if self._config['timeSteps'] else None
+            initial_time = float(self._config['initialTime']) if self._config['initialTime'] else None
+            finish_time = float(self._config['finishTime']) if self._config['finishTime'] else None
+            self._model.set_parameters({
+                "prefix": self._config['prefix'],
+                "numberOfTimeSteps": number_of_time_steps,
+                "initialTime": initial_time,
+                "finishTime": finish_time,
+            })
 
-        self._model.export()
-        if self._config['exportType'] == 'webgl':
-            if self._config['splitFiles']:
-                split_size = convert_to_bytes(self._config['splitSize'])
-                if split_size != -1:
-                    split_webgl_output(self._model.metadata_file(), split_size, True)
-        self._doneExecution()
-        QtWidgets.QApplication.restoreOverrideCursor()
+            self._model.export()
+            if self._config['exportType'] == 'webgl':
+                if self._config['splitFiles']:
+                    split_size = convert_to_bytes(self._config['splitSize'])
+                    if split_size != -1:
+                        split_webgl_output(self._model.metadata_file(), split_size, True)
+            self._doneExecution()
+        finally:
+            QtWidgets.QApplication.restoreOverrideCursor()
 
     def setPortData(self, index, dataIn):
         """
@@ -98,6 +103,12 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         :param dataIn: The data to set for the port at the given index.
         """
         self._document = dataIn  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
+
+    def getPortData(self, index):
+        """
+        :param index: Index of the port to return.
+        """
+        return os.path.realpath(os.path.join(self._location, self._config['outputDir']))
 
     def configure(self):
         """
