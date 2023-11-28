@@ -7,4 +7,4 @@ This plugin:
 
 uses:
 
-* https://opencmiss.org/1.0/rdf-schema#ArgonDocument
+* https://cmlibs.org/1.0/rdf-schema#ArgonDocument

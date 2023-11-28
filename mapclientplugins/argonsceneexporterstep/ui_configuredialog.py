@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'configuredialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.2
+## Created by: Qt User Interface Compiler version 6.5.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -84,6 +84,7 @@ class Ui_ConfigureDialog(object):
         self.comboBoxExportType.addItem("")
         self.comboBoxExportType.addItem("")
         self.comboBoxExportType.addItem("")
+        self.comboBoxExportType.addItem("")
         self.comboBoxExportType.setObjectName(u"comboBoxExportType")
 
         self.formLayout_3.setWidget(3, QFormLayout.FieldRole, self.comboBoxExportType)
@@ -92,6 +93,52 @@ class Ui_ConfigureDialog(object):
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.stackedWidget.setLineWidth(0)
         self.stackedWidget.setMidLineWidth(-4)
+        self.pageFlatmapSVG = QWidget()
+        self.pageFlatmapSVG.setObjectName(u"pageFlatmapSVG")
+        self.stackedWidget.addWidget(self.pageFlatmapSVG)
+        self.pageImage = QWidget()
+        self.pageImage.setObjectName(u"pageImage")
+        self.formLayout = QFormLayout(self.pageImage)
+        self.formLayout.setObjectName(u"formLayout")
+        self.labelWidth = QLabel(self.pageImage)
+        self.labelWidth.setObjectName(u"labelWidth")
+
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.labelWidth)
+
+        self.spinBoxWidth = QSpinBox(self.pageImage)
+        self.spinBoxWidth.setObjectName(u"spinBoxWidth")
+        self.spinBoxWidth.setMinimum(18)
+        self.spinBoxWidth.setMaximum(9999)
+        self.spinBoxWidth.setValue(512)
+
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.spinBoxWidth)
+
+        self.labelHeight = QLabel(self.pageImage)
+        self.labelHeight.setObjectName(u"labelHeight")
+
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.labelHeight)
+
+        self.spinBoxHeight = QSpinBox(self.pageImage)
+        self.spinBoxHeight.setObjectName(u"spinBoxHeight")
+        self.spinBoxHeight.setMinimum(18)
+        self.spinBoxHeight.setMaximum(9999)
+        self.spinBoxHeight.setValue(512)
+
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.spinBoxHeight)
+
+        self.stackedWidget.addWidget(self.pageImage)
+        self.pageSTL = QWidget()
+        self.pageSTL.setObjectName(u"pageSTL")
+        self.stackedWidget.addWidget(self.pageSTL)
+        self.pageThumbnail = QWidget()
+        self.pageThumbnail.setObjectName(u"pageThumbnail")
+        self.stackedWidget.addWidget(self.pageThumbnail)
+        self.pageVTK = QWidget()
+        self.pageVTK.setObjectName(u"pageVTK")
+        self.stackedWidget.addWidget(self.pageVTK)
+        self.pageWavefront = QWidget()
+        self.pageWavefront.setObjectName(u"pageWavefront")
+        self.stackedWidget.addWidget(self.pageWavefront)
         self.pageWebGL = QWidget()
         self.pageWebGL.setObjectName(u"pageWebGL")
         self.formLayout_2 = QFormLayout(self.pageWebGL)
@@ -142,49 +189,6 @@ class Ui_ConfigureDialog(object):
         self.formLayout_2.setWidget(4, QFormLayout.FieldRole, self.finishTime_lineEdit)
 
         self.stackedWidget.addWidget(self.pageWebGL)
-        self.pageVTK = QWidget()
-        self.pageVTK.setObjectName(u"pageVTK")
-        self.stackedWidget.addWidget(self.pageVTK)
-        self.pageWavefront = QWidget()
-        self.pageWavefront.setObjectName(u"pageWavefront")
-        self.stackedWidget.addWidget(self.pageWavefront)
-        self.pageSTL = QWidget()
-        self.pageSTL.setObjectName(u"pageSTL")
-        self.stackedWidget.addWidget(self.pageSTL)
-        self.pageThumbnail = QWidget()
-        self.pageThumbnail.setObjectName(u"pageThumbnail")
-        self.stackedWidget.addWidget(self.pageThumbnail)
-        self.pageImage = QWidget()
-        self.pageImage.setObjectName(u"pageImage")
-        self.formLayout = QFormLayout(self.pageImage)
-        self.formLayout.setObjectName(u"formLayout")
-        self.labelWidth = QLabel(self.pageImage)
-        self.labelWidth.setObjectName(u"labelWidth")
-
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.labelWidth)
-
-        self.spinBoxWidth = QSpinBox(self.pageImage)
-        self.spinBoxWidth.setObjectName(u"spinBoxWidth")
-        self.spinBoxWidth.setMinimum(18)
-        self.spinBoxWidth.setMaximum(9999)
-        self.spinBoxWidth.setValue(512)
-
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.spinBoxWidth)
-
-        self.labelHeight = QLabel(self.pageImage)
-        self.labelHeight.setObjectName(u"labelHeight")
-
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.labelHeight)
-
-        self.spinBoxHeight = QSpinBox(self.pageImage)
-        self.spinBoxHeight.setObjectName(u"spinBoxHeight")
-        self.spinBoxHeight.setMinimum(18)
-        self.spinBoxHeight.setMaximum(9999)
-        self.spinBoxHeight.setValue(512)
-
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.spinBoxHeight)
-
-        self.stackedWidget.addWidget(self.pageImage)
 
         self.formLayout_3.setWidget(4, QFormLayout.SpanningRole, self.stackedWidget)
 
@@ -205,8 +209,8 @@ class Ui_ConfigureDialog(object):
         self.buttonBox.accepted.connect(ConfigureDialog.accept)
         self.buttonBox.rejected.connect(ConfigureDialog.reject)
 
-        self.comboBoxExportType.setCurrentIndex(0)
-        self.stackedWidget.setCurrentIndex(0)
+        self.comboBoxExportType.setCurrentIndex(6)
+        self.stackedWidget.setCurrentIndex(6)
 
 
         QMetaObject.connectSlotsByName(ConfigureDialog)
@@ -220,20 +224,21 @@ class Ui_ConfigureDialog(object):
         self.label1.setText(QCoreApplication.translate("ConfigureDialog", u"Output directory:", None))
         self.pushButtonOutputDirectory.setText(QCoreApplication.translate("ConfigureDialog", u"...", None))
         self.label_5.setText(QCoreApplication.translate("ConfigureDialog", u"Export type:", None))
-        self.comboBoxExportType.setItemText(0, QCoreApplication.translate("ConfigureDialog", u"webgl", None))
-        self.comboBoxExportType.setItemText(1, QCoreApplication.translate("ConfigureDialog", u"vtk", None))
-        self.comboBoxExportType.setItemText(2, QCoreApplication.translate("ConfigureDialog", u"wavefront", None))
-        self.comboBoxExportType.setItemText(3, QCoreApplication.translate("ConfigureDialog", u"stl", None))
-        self.comboBoxExportType.setItemText(4, QCoreApplication.translate("ConfigureDialog", u"thumbnail", None))
-        self.comboBoxExportType.setItemText(5, QCoreApplication.translate("ConfigureDialog", u"image", None))
+        self.comboBoxExportType.setItemText(0, QCoreApplication.translate("ConfigureDialog", u"flatmapsvg", None))
+        self.comboBoxExportType.setItemText(1, QCoreApplication.translate("ConfigureDialog", u"image", None))
+        self.comboBoxExportType.setItemText(2, QCoreApplication.translate("ConfigureDialog", u"stl", None))
+        self.comboBoxExportType.setItemText(3, QCoreApplication.translate("ConfigureDialog", u"thumbnail", None))
+        self.comboBoxExportType.setItemText(4, QCoreApplication.translate("ConfigureDialog", u"vtk", None))
+        self.comboBoxExportType.setItemText(5, QCoreApplication.translate("ConfigureDialog", u"wavefront", None))
+        self.comboBoxExportType.setItemText(6, QCoreApplication.translate("ConfigureDialog", u"webgl", None))
 
+        self.labelWidth.setText(QCoreApplication.translate("ConfigureDialog", u"Width:", None))
+        self.labelHeight.setText(QCoreApplication.translate("ConfigureDialog", u"Height:", None))
         self.checkBoxSplitWebGLOutput.setText(QCoreApplication.translate("ConfigureDialog", u"Split webGL output", None))
         self.splitMaxSize_lineEdit.setText(QCoreApplication.translate("ConfigureDialog", u"18MiB", None))
         self.label_6.setText(QCoreApplication.translate("ConfigureDialog", u"Split files greater than:", None))
         self.label_4.setText(QCoreApplication.translate("ConfigureDialog", u"Time Steps : ", None))
         self.label.setText(QCoreApplication.translate("ConfigureDialog", u"Initial Time (s) : ", None))
         self.label_2.setText(QCoreApplication.translate("ConfigureDialog", u"Finish Time (s) : ", None))
-        self.labelWidth.setText(QCoreApplication.translate("ConfigureDialog", u"Width:", None))
-        self.labelHeight.setText(QCoreApplication.translate("ConfigureDialog", u"Height:", None))
     # retranslateUi
 

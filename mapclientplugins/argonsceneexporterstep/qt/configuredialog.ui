@@ -71,21 +71,16 @@
       <item row="3" column="1">
        <widget class="QComboBox" name="comboBoxExportType">
         <property name="currentIndex">
-         <number>0</number>
+         <number>6</number>
         </property>
         <item>
          <property name="text">
-          <string>webgl</string>
+          <string>flatmapsvg</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>vtk</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>wavefront</string>
+          <string>image</string>
          </property>
         </item>
         <item>
@@ -100,7 +95,17 @@
         </item>
         <item>
          <property name="text">
-          <string>image</string>
+          <string>vtk</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>wavefront</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>webgl</string>
          </property>
         </item>
        </widget>
@@ -114,8 +119,57 @@
          <number>-4</number>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>6</number>
         </property>
+        <widget class="QWidget" name="pageFlatmapSVG"/>
+        <widget class="QWidget" name="pageImage">
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelWidth">
+            <property name="text">
+             <string>Width:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinBoxWidth">
+            <property name="minimum">
+             <number>18</number>
+            </property>
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+            <property name="value">
+             <number>512</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelHeight">
+            <property name="text">
+             <string>Height:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="spinBoxHeight">
+            <property name="minimum">
+             <number>18</number>
+            </property>
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+            <property name="value">
+             <number>512</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageSTL"/>
+        <widget class="QWidget" name="pageThumbnail"/>
+        <widget class="QWidget" name="pageVTK"/>
+        <widget class="QWidget" name="pageWavefront"/>
         <widget class="QWidget" name="pageWebGL">
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="1">
@@ -168,54 +222,6 @@
           </item>
           <item row="4" column="1">
            <widget class="QLineEdit" name="finishTime_lineEdit"/>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="pageVTK"/>
-        <widget class="QWidget" name="pageWavefront"/>
-        <widget class="QWidget" name="pageSTL"/>
-        <widget class="QWidget" name="pageThumbnail"/>
-        <widget class="QWidget" name="pageImage">
-         <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="labelWidth">
-            <property name="text">
-             <string>Width:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="spinBoxWidth">
-            <property name="minimum">
-             <number>18</number>
-            </property>
-            <property name="maximum">
-             <number>9999</number>
-            </property>
-            <property name="value">
-             <number>512</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="labelHeight">
-            <property name="text">
-             <string>Height:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="spinBoxHeight">
-            <property name="minimum">
-             <number>18</number>
-            </property>
-            <property name="maximum">
-             <number>9999</number>
-            </property>
-            <property name="value">
-             <number>512</number>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>
