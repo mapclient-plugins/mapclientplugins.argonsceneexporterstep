@@ -11,6 +11,7 @@ from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDia
 from mapclientplugins.argonsceneexporterstep.splitter.utilities import convert_to_bytes
 from mapclientplugins.argonsceneexporterstep.splitter.json_resource import split_webgl_output
 
+from cmlibs.exporter.flatmapsvg import ArgonSceneExporter as FlatmapSVGExporter
 from cmlibs.exporter.webgl import ArgonSceneExporter as WebGLExporter
 from cmlibs.exporter.vtk import ArgonSceneExporter as VTKExporter
 from cmlibs.exporter.wavefront import ArgonSceneExporter as WavefrontExporter
@@ -33,7 +34,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Ports:
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
-                      'https://opencmiss.org/1.0/rdf-schema#ArgonDocument'))
+                      'https://cmlibs.org/1.0/rdf-schema#ArgonDocument'))
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#directory_location'))
@@ -65,6 +66,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
                 self._model = WavefrontExporter(output_dir)
             elif self._config['exportType'] == 'stl':
                 self._model = STLExporter(output_dir)
+            elif self._config['exportType'] == 'flatmapsvg':
+                self._model = FlatmapSVGExporter(output_dir)
             elif self._config['exportType'] == 'thumbnail':
                 self._model = ThumbnailExporter(output_dir)
             elif self._config['exportType'] == 'image':
