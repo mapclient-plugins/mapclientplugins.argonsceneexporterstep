@@ -62,13 +62,42 @@
        </layout>
       </item>
       <item row="3" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Tessellation:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="comboBoxTessellation">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>low</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>medium</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>high</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Export type:</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="QComboBox" name="comboBoxExportType">
         <property name="currentIndex">
          <number>6</number>
@@ -110,7 +139,7 @@
         </item>
        </widget>
       </item>
-      <item row="4" column="0" colspan="2">
+      <item row="5" column="0" colspan="2">
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="lineWidth">
          <number>0</number>
@@ -173,54 +202,61 @@
         <widget class="QWidget" name="pageWebGL">
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="1">
+           <widget class="QCheckBox" name="checkBoxLODs">
+            <property name="text">
+             <string>Level of details</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
            <widget class="QCheckBox" name="checkBoxSplitWebGLOutput">
             <property name="text">
              <string>Split webGL output</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QLineEdit" name="splitMaxSize_lineEdit">
             <property name="text">
              <string>18MiB</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Split files greater than:</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Time Steps : </string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Initial Time (s) : </string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="5" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Finish Time (s) : </string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QLineEdit" name="timeSteps_lineEdit"/>
           </item>
-          <item row="3" column="1">
+          <item row="4" column="1">
            <widget class="QLineEdit" name="initialTime_lineEdit"/>
           </item>
-          <item row="4" column="1">
+          <item row="5" column="1">
            <widget class="QLineEdit" name="finishTime_lineEdit"/>
           </item>
          </layout>
