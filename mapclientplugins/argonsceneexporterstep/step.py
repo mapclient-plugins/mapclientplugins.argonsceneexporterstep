@@ -41,7 +41,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Port data:
         self._document = None  # https://opencmiss.org/1.0/rdf-schema#ArgonDocument
         # Config:
-        self._config = {'identifier': '', 'exportType': 'webgl', 'prefix': '',
+        self._config = {'identifier': '', 'exportType': 'webgl', 'prefix': '', 'tessellationLevel': 'medium',
                         'timeSteps': '', 'initialTime': '', 'finishTime': '',
                         'outputDir': '', 'splitSize': '18 MiB', 'splitFiles': False}
         self._model = None
@@ -60,6 +60,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
             output_dir = os.path.realpath(output_dir)
             if self._config['exportType'] == 'webgl':
                 self._model = WebGLExporter(output_dir)
+                if self._config['LODs']:
+                    self._model.multiple_levels = True
             elif self._config['exportType'] == 'vtk':
                 self._model = VTKExporter(output_dir)
             elif self._config['exportType'] == 'wavefront':
@@ -74,6 +76,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
                 self._model = ImageExporter(self._config['width'], self._config['height'], output_dir)
             else:
                 raise NotImplementedError('Current export type selection is not implemented.')
+
+            self._document.setTessellationLevel(self._config['tessellationLevel'])
 
             self._model.set_document(self._document)
             number_of_time_steps = int(self._config['timeSteps']) if self._config['timeSteps'] else None
