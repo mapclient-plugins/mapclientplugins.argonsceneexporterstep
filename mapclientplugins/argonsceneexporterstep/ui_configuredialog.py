@@ -72,23 +72,10 @@ class Ui_ConfigureDialog(object):
 
         self.formLayout_3.setLayout(2, QFormLayout.FieldRole, self.horizontalLayout)
 
-        self.label_7 = QLabel(self.configGroupBox)
-        self.label_7.setObjectName(u"label_7")
-
-        self.formLayout_3.setWidget(3, QFormLayout.LabelRole, self.label_7)
-
-        self.comboBoxTessellation = QComboBox(self.configGroupBox)
-        self.comboBoxTessellation.addItem("")
-        self.comboBoxTessellation.addItem("")
-        self.comboBoxTessellation.addItem("")
-        self.comboBoxTessellation.setObjectName(u"comboBoxTessellation")
-
-        self.formLayout_3.setWidget(3, QFormLayout.FieldRole, self.comboBoxTessellation)
-
         self.label_5 = QLabel(self.configGroupBox)
         self.label_5.setObjectName(u"label_5")
 
-        self.formLayout_3.setWidget(4, QFormLayout.LabelRole, self.label_5)
+        self.formLayout_3.setWidget(3, QFormLayout.LabelRole, self.label_5)
 
         self.comboBoxExportType = QComboBox(self.configGroupBox)
         self.comboBoxExportType.addItem("")
@@ -100,7 +87,7 @@ class Ui_ConfigureDialog(object):
         self.comboBoxExportType.addItem("")
         self.comboBoxExportType.setObjectName(u"comboBoxExportType")
 
-        self.formLayout_3.setWidget(4, QFormLayout.FieldRole, self.comboBoxExportType)
+        self.formLayout_3.setWidget(3, QFormLayout.FieldRole, self.comboBoxExportType)
 
         self.stackedWidget = QStackedWidget(self.configGroupBox)
         self.stackedWidget.setObjectName(u"stackedWidget")
@@ -208,7 +195,7 @@ class Ui_ConfigureDialog(object):
 
         self.stackedWidget.addWidget(self.pageWebGL)
 
-        self.formLayout_3.setWidget(5, QFormLayout.SpanningRole, self.stackedWidget)
+        self.formLayout_3.setWidget(4, QFormLayout.SpanningRole, self.stackedWidget)
 
 
         self.verticalLayout.addWidget(self.configGroupBox)
@@ -227,7 +214,6 @@ class Ui_ConfigureDialog(object):
         self.buttonBox.accepted.connect(ConfigureDialog.accept)
         self.buttonBox.rejected.connect(ConfigureDialog.reject)
 
-        self.comboBoxTessellation.setCurrentIndex(1)
         self.comboBoxExportType.setCurrentIndex(6)
         self.stackedWidget.setCurrentIndex(6)
 
@@ -242,11 +228,6 @@ class Ui_ConfigureDialog(object):
         self.label_3.setText(QCoreApplication.translate("ConfigureDialog", u"Prefix : ", None))
         self.label1.setText(QCoreApplication.translate("ConfigureDialog", u"Output directory:", None))
         self.pushButtonOutputDirectory.setText(QCoreApplication.translate("ConfigureDialog", u"...", None))
-        self.label_7.setText(QCoreApplication.translate("ConfigureDialog", u"Tessellation:", None))
-        self.comboBoxTessellation.setItemText(0, QCoreApplication.translate("ConfigureDialog", u"low", None))
-        self.comboBoxTessellation.setItemText(1, QCoreApplication.translate("ConfigureDialog", u"medium", None))
-        self.comboBoxTessellation.setItemText(2, QCoreApplication.translate("ConfigureDialog", u"high", None))
-
         self.label_5.setText(QCoreApplication.translate("ConfigureDialog", u"Export type:", None))
         self.comboBoxExportType.setItemText(0, QCoreApplication.translate("ConfigureDialog", u"flatmapsvg", None))
         self.comboBoxExportType.setItemText(1, QCoreApplication.translate("ConfigureDialog", u"image", None))

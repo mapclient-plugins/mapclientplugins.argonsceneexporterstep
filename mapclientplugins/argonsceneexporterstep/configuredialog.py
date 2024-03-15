@@ -115,8 +115,7 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._previousIdentifier = self._ui.lineEditIdentifier.text()
         config = {'identifier': self._ui.lineEditIdentifier.text(), 'prefix': self._ui.prefix_lineEdit.text(), 'timeSteps': self._ui.timeSteps_lineEdit.text(),
                   'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(),
-                  'outputDir': self._output_location(), 'tessellationLevel': self._ui.comboBoxTessellation.currentText(),
-                  'LODs': self._ui.checkBoxLODs.isChecked(),
+                  'outputDir': self._output_location(), 'LODs': self._ui.checkBoxLODs.isChecked(),
                   'exportType': self._ui.comboBoxExportType.currentText(),
                   'splitFiles': self._ui.checkBoxSplitWebGLOutput.isChecked(), 'splitSize': self._ui.splitMaxSize_lineEdit.text(),
                   'width': self._ui.spinBoxWidth.value(), 'height': self._ui.spinBoxHeight.value()}
@@ -139,7 +138,6 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._ui.timeSteps_lineEdit.setText(config['timeSteps'])
         self._ui.initialTime_lineEdit.setText(config['initialTime'])
         self._ui.finishTime_lineEdit.setText(config['finishTime'])
-        self._ui.comboBoxTessellation.setCurrentText(config['tessellationLevel'])
         self._ui.checkBoxLODs.setChecked(config['LODs'])
         self._ui.comboBoxExportType.setCurrentText(config['exportType'])
         self._ui.splitMaxSize_lineEdit.setText(config.get('splitSize', '18 MiB'))
