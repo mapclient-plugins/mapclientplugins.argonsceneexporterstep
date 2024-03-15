@@ -115,8 +115,8 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._previousIdentifier = self._ui.lineEditIdentifier.text()
         config = {'identifier': self._ui.lineEditIdentifier.text(), 'prefix': self._ui.prefix_lineEdit.text(), 'timeSteps': self._ui.timeSteps_lineEdit.text(),
                   'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(),
-                  'outputDir': self._output_location(), 'LODs': self._ui.checkBoxLODs.isChecked(),
-                  'exportType': self._ui.comboBoxExportType.currentText(),
+                  'outputDir': self._output_location(), 'exportType': self._ui.comboBoxExportType.currentText(),
+                  'LODs': self._ui.checkBoxLODs.isChecked(),
                   'splitFiles': self._ui.checkBoxSplitWebGLOutput.isChecked(), 'splitSize': self._ui.splitMaxSize_lineEdit.text(),
                   'width': self._ui.spinBoxWidth.value(), 'height': self._ui.spinBoxHeight.value()}
         if self._previousLocation:
