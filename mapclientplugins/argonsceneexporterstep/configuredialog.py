@@ -138,7 +138,8 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._ui.timeSteps_lineEdit.setText(config['timeSteps'])
         self._ui.initialTime_lineEdit.setText(config['initialTime'])
         self._ui.finishTime_lineEdit.setText(config['finishTime'])
-        self._ui.checkBoxLODs.setChecked(config['LODs'])
+        if 'LODs' in config:
+            self._ui.checkBoxLODs.setChecked(config['LODs'])
         self._ui.comboBoxExportType.setCurrentText(config['exportType'])
         self._ui.splitMaxSize_lineEdit.setText(config.get('splitSize', '18 MiB'))
         self._ui.checkBoxSplitWebGLOutput.setChecked(config.get('splitFiles', False))
