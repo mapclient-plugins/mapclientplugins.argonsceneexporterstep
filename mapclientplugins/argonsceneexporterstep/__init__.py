@@ -3,7 +3,7 @@
 MAP Client Plugin
 """
 
-__version__ = '0.6.0'
+__version__ = '0.6.1'
 __author__ = 'Kay Wang'
 __stepname__ = 'Argon Scene Exporter'
 __location__ = 'https://github.com/mapclient-plugins/mapclientplugins.argonsceneexporterstep.git'
