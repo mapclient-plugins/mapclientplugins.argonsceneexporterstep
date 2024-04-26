@@ -60,8 +60,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
             output_dir = os.path.realpath(output_dir)
             if self._config['exportType'] == 'webgl':
                 self._model = WebGLExporter(output_dir)
-                if self._config['LODs']:
-                    self._model.setLODs(True)
+                self._model.setLoD(self._config.get("LODs", False))
             elif self._config['exportType'] == 'vtk':
                 self._model = VTKExporter(output_dir)
             elif self._config['exportType'] == 'wavefront':
