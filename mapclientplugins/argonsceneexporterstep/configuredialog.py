@@ -65,14 +65,14 @@ class ConfigureDialog(QtWidgets.QDialog):
         Override the accept method so that we can confirm saving an
         invalid configuration.
         """
-        result = QtWidgets.QMessageBox.Yes
+        result = QtWidgets.QMessageBox.StandardButton.Yes
         if not self.validate():
             result = QtWidgets.QMessageBox.warning(
                 self, 'Invalid Configuration',
                 'This configuration is invalid.  Unpredictable behaviour may result if you choose \'Yes\', are you sure you want to save this configuration?)',
-                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+                QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.No)
 
-        if result == QtWidgets.QMessageBox.Yes:
+        if result == QtWidgets.QMessageBox.StandardButton.Yes:
             QtWidgets.QDialog.accept(self)
 
     def setWorkflowLocation(self, location):
@@ -116,6 +116,7 @@ class ConfigureDialog(QtWidgets.QDialog):
         config = {'identifier': self._ui.lineEditIdentifier.text(), 'prefix': self._ui.prefix_lineEdit.text(), 'timeSteps': self._ui.timeSteps_lineEdit.text(),
                   'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(),
                   'outputDir': self._output_location(), 'exportType': self._ui.comboBoxExportType.currentText(),
+                  'LODs': self._ui.checkBoxLODs.isChecked(),
                   'splitFiles': self._ui.checkBoxSplitWebGLOutput.isChecked(), 'splitSize': self._ui.splitMaxSize_lineEdit.text(),
                   'width': self._ui.spinBoxWidth.value(), 'height': self._ui.spinBoxHeight.value()}
         if self._previousLocation:
@@ -137,6 +138,7 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._ui.timeSteps_lineEdit.setText(config['timeSteps'])
         self._ui.initialTime_lineEdit.setText(config['initialTime'])
         self._ui.finishTime_lineEdit.setText(config['finishTime'])
+        self._ui.checkBoxLODs.setChecked(config.get('LODs', False))
         self._ui.comboBoxExportType.setCurrentText(config['exportType'])
         self._ui.splitMaxSize_lineEdit.setText(config.get('splitSize', '18 MiB'))
         self._ui.checkBoxSplitWebGLOutput.setChecked(config.get('splitFiles', False))
