@@ -150,6 +150,11 @@ class Ui_ConfigureDialog(object):
 
         self.frame = QFrame(self.pageWebGL)
         self.frame.setObjectName(u"frame")
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
+        self.frame.setSizePolicy(sizePolicy)
         self.frame.setFrameShape(QFrame.Shape.NoFrame)
         self.frame.setFrameShadow(QFrame.Shadow.Plain)
         self.frame.setLineWidth(0)
@@ -182,6 +187,8 @@ class Ui_ConfigureDialog(object):
 
         self.frame_2 = QFrame(self.pageWebGL)
         self.frame_2.setObjectName(u"frame_2")
+        sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
+        self.frame_2.setSizePolicy(sizePolicy)
         self.frame_2.setFrameShape(QFrame.Shape.NoFrame)
         self.frame_2.setFrameShadow(QFrame.Shadow.Plain)
         self.frame_2.setLineWidth(0)
