@@ -4,6 +4,7 @@ import math
 import os
 import sys
 
+from mapclientplugins.argonsceneexporterstep.splitter.utilities import convert_to_bytes
 
 FILE_SIZE_LIMIT = 1024 * 1024 * 18
 
@@ -81,25 +82,45 @@ def _split_file(big_file, splits_required):
 
         while index < faces_len:
             face_mask = faces[index]
-            if face_mask == THREEJS_TYPE_VERTEX_NORMAL:
-                mask_size = 7
-                current_faces.append(faces[index])
+            current_faces.append(face_mask)
+            index += 1
+            chunk_progress += 1
+            if face_mask == THREEJS_TYPE_TRIANGLE:
+                # These aren't really triangles they are interpreted as lines so, we can't
+                # break on an odd number of vertex pairs.
                 current_faces.extend(
-                    _map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
+                    _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
+                index += 3
+                chunk_progress += 3
+                if chunk_progress >= chunk_size and index < faces_len:
+                    # If we are even do nothing otherwise add one more face on to make it even.
+                    even = int(len(current_faces) - len(current_faces) / 4) % 2 == 0
+                    if not even:
+                        current_faces.extend(
+                            _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
+                        index += 3
+                        chunk_progress += 3
+            elif face_mask == THREEJS_TYPE_VERTEX_NORMAL:
                 current_faces.extend(
-                    _map_values(current_normals, face_normal_map, faces[index + 4: index + 7], normals))
-                index += mask_size
-                chunk_progress += mask_size
+                    _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
+                index += 3
+                chunk_progress += 3
+                current_faces.extend(
+                    _map_values(current_normals, face_normal_map, faces[index: index + 3], normals))
+                index += 3
+                chunk_progress += 3
             elif face_mask == (THREEJS_TYPE_VERTEX_NORMAL + THREEJS_TYPE_VERTEX_COLOR):
-                mask_size = 10
-                current_faces.append(faces[index])
                 current_faces.extend(
-                    _map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
+                    _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
+                index += 3
+                chunk_progress += 3
                 current_faces.extend(
-                    _map_values(current_normals, face_normal_map, faces[index + 4: index + 7], normals))
+                    _map_values(current_normals, face_normal_map, faces[index: index + 3], normals))
+                index += 3
+                chunk_progress += 3
                 current_faces.extend(
-                    _map_values(current_colours, face_colour_map, faces[index + 7: index + 10], colours, size=1))
-                for source_value in faces[index + 7: index + 10]:
+                    _map_values(current_colours, face_colour_map, faces[index: index + 3], colours, size=1))
+                for source_value in faces[index: index + 3]:
                     if source_value not in face_morph_colour_map:
 
                         for index_colour, morph_colour in enumerate(morph_colours):
@@ -111,15 +132,9 @@ def _split_file(big_file, splits_required):
                             value = morph_colour["colors"][source_value]
                             current_morph_colours[index_colour]["colors"].append(value)
 
-                index += mask_size
-                chunk_progress += mask_size
-            elif face_mask == THREEJS_TYPE_TRIANGLE:
-                mask_size = 4
-                current_faces.append(faces[index])
-                current_faces.append(
-                    _map_values(current_vertices, face_vertex_map, faces[index + 1: index + 4], vertices))
-                index += mask_size
-                chunk_progress += mask_size
+                index += 3
+                chunk_progress += 3
+
             else:
                 raise Exception(f"Cannot handle face mask: {face_mask}.")
 
@@ -140,10 +155,7 @@ def _split_file(big_file, splits_required):
                 current_vertices = []
                 current_normals = []
                 current_colours = []
-                if morph_colours is None:
-                    current_morph_colours = []
-                else:
-                    current_morph_colours = [{} for _ in morph_colours]
+                current_morph_colours = [{}] * (0 if morph_colours is None else len(morph_colours))
                 face_vertex_map = {}
                 face_normal_map = {}
                 face_colour_map = {}
@@ -228,15 +240,6 @@ def _replace_big_file(meta_content, split_files, url):
     return new_meta_content
 
 
-def _parse_arguments():
-    parser = argparse.ArgumentParser(prog="json_resource_splitter")
-    parser.add_argument("webgl_meta", help="A webGL metadata file")
-    parser.add_argument("-s", "--size", action='store_true', help="Allow pre-release versions")
-    parser.add_argument("-d", "--delete", action="store_true", help="Delete big files that are split", default=False)
-
-    return parser.parse_args()
-
-
 def split_webgl_output(meta_file, file_size_limit, delete_split_source=False):
     with open(meta_file) as f:
         meta_content = json.load(f)
@@ -268,13 +271,27 @@ def split_webgl_output(meta_file, file_size_limit, delete_split_source=False):
         json.dump(new_meta_content, f, indent=4)
 
 
+def _parse_arguments():
+    parser = argparse.ArgumentParser(prog="json_resource_splitter")
+    parser.add_argument("webgl_meta", help="A webGL metadata file")
+    parser.add_argument("-s", "--size", help="Set text description of split limit, 1MB, 3GB etc.")
+    parser.add_argument("-d", "--delete", action="store_true", help="Delete big files that are split", default=False)
+
+    return parser.parse_args()
+
+
 def main():
     args = _parse_arguments()
 
     if not os.path.isfile(args.webgl_meta):
         sys.exit(3)
 
-    split_webgl_output(args.webgl_meta, FILE_SIZE_LIMIT, args.delete)
+    if args.size:
+        size_limit = convert_to_bytes(args.size)
+    else:
+        size_limit = FILE_SIZE_LIMIT
+
+    split_webgl_output(args.webgl_meta, size_limit, args.delete)
 
 
 if __name__ == "__main__":
