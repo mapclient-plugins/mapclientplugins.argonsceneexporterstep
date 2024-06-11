@@ -50,10 +50,10 @@ class ConfigureDialog(QtWidgets.QDialog):
     def _update_ui(self):
         if self.sender() == self._ui.checkBoxLODs:
             lod_on = self._ui.checkBoxLODs.isChecked()
-            self._ui.checkBoxSplitWebGLOutput.setEnabled(not lod_on)
+            # self._ui.checkBoxSplitWebGLOutput.setEnabled(not lod_on)
         elif self.sender() == self._ui.checkBoxSplitWebGLOutput:
             webgl_on = self._ui.checkBoxSplitWebGLOutput.isChecked()
-            self._ui.checkBoxLODs.setEnabled(not webgl_on)
+            # self._ui.checkBoxLODs.setEnabled(not webgl_on)
         current_index = self._ui.comboBoxExportType.currentIndex()
         self._ui.stackedWidget.setCurrentIndex(current_index)
 
