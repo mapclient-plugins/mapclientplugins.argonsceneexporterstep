@@ -145,6 +145,7 @@ class Ui_ConfigureDialog(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.label_6 = QLabel(self.pageWebGL)
         self.label_6.setObjectName(u"label_6")
+        self.label_6.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.label_6, 0, 0, 1, 1)
 
@@ -171,19 +172,50 @@ class Ui_ConfigureDialog(object):
 
         self.horizontalLayout_3.addWidget(self.label_7)
 
-        self.splitMaxSize_lineEdit = QLineEdit(self.frame)
-        self.splitMaxSize_lineEdit.setObjectName(u"splitMaxSize_lineEdit")
+        self.lineEditSplitMaxSize = QLineEdit(self.frame)
+        self.lineEditSplitMaxSize.setObjectName(u"lineEditSplitMaxSize")
 
-        self.horizontalLayout_3.addWidget(self.splitMaxSize_lineEdit)
+        self.horizontalLayout_3.addWidget(self.lineEditSplitMaxSize)
 
 
-        self.gridLayout_2.addWidget(self.frame, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.frame, 0, 1, 1, 2)
+
+        self.label_9 = QLabel(self.pageWebGL)
+        self.label_9.setObjectName(u"label_9")
+
+        self.gridLayout_2.addWidget(self.label_9, 1, 0, 1, 1)
+
+        self.frame_3 = QFrame(self.pageWebGL)
+        self.frame_3.setObjectName(u"frame_3")
+        self.frame_3.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_3.setFrameShadow(QFrame.Shadow.Plain)
+        self.frame_3.setLineWidth(0)
+        self.horizontalLayout_4 = QHBoxLayout(self.frame_3)
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.checkBoxCombineWebGLOutput = QCheckBox(self.frame_3)
+        self.checkBoxCombineWebGLOutput.setObjectName(u"checkBoxCombineWebGLOutput")
+
+        self.horizontalLayout_4.addWidget(self.checkBoxCombineWebGLOutput)
+
+        self.label_10 = QLabel(self.frame_3)
+        self.label_10.setObjectName(u"label_10")
+
+        self.horizontalLayout_4.addWidget(self.label_10)
+
+        self.lineEditCombineMaxSize = QLineEdit(self.frame_3)
+        self.lineEditCombineMaxSize.setObjectName(u"lineEditCombineMaxSize")
+
+        self.horizontalLayout_4.addWidget(self.lineEditCombineMaxSize)
+
+
+        self.gridLayout_2.addWidget(self.frame_3, 1, 1, 1, 2)
 
         self.label_8 = QLabel(self.pageWebGL)
         self.label_8.setObjectName(u"label_8")
         self.label_8.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.label_8, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_8, 2, 0, 1, 1)
 
         self.frame_2 = QFrame(self.pageWebGL)
         self.frame_2.setObjectName(u"frame_2")
@@ -201,44 +233,44 @@ class Ui_ConfigureDialog(object):
         self.horizontalLayout_2.addWidget(self.checkBoxLODs)
 
 
-        self.gridLayout_2.addWidget(self.frame_2, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.frame_2, 2, 1, 1, 1)
 
         self.label_4 = QLabel(self.pageWebGL)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.label_4, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_4, 3, 0, 1, 1)
 
         self.timeSteps_lineEdit = QLineEdit(self.pageWebGL)
         self.timeSteps_lineEdit.setObjectName(u"timeSteps_lineEdit")
 
-        self.gridLayout_2.addWidget(self.timeSteps_lineEdit, 2, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.timeSteps_lineEdit, 3, 1, 1, 2)
 
         self.label = QLabel(self.pageWebGL)
         self.label.setObjectName(u"label")
         self.label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.label, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label, 4, 0, 1, 1)
 
         self.initialTime_lineEdit = QLineEdit(self.pageWebGL)
         self.initialTime_lineEdit.setObjectName(u"initialTime_lineEdit")
 
-        self.gridLayout_2.addWidget(self.initialTime_lineEdit, 3, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.initialTime_lineEdit, 4, 1, 1, 1)
 
         self.label_2 = QLabel(self.pageWebGL)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout_2.addWidget(self.label_2, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_2, 5, 0, 1, 1)
 
         self.finishTime_lineEdit = QLineEdit(self.pageWebGL)
         self.finishTime_lineEdit.setObjectName(u"finishTime_lineEdit")
 
-        self.gridLayout_2.addWidget(self.finishTime_lineEdit, 4, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.finishTime_lineEdit, 5, 1, 1, 2)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.gridLayout_2.addItem(self.verticalSpacer, 5, 1, 1, 1)
+        self.gridLayout_2.addItem(self.verticalSpacer, 6, 2, 1, 1)
 
         self.stackedWidget.addWidget(self.pageWebGL)
 
@@ -292,7 +324,14 @@ class Ui_ConfigureDialog(object):
 #endif // QT_CONFIG(tooltip)
         self.checkBoxSplitWebGLOutput.setText("")
         self.label_7.setText(QCoreApplication.translate("ConfigureDialog", u"@", None))
-        self.splitMaxSize_lineEdit.setText(QCoreApplication.translate("ConfigureDialog", u"18MiB", None))
+        self.lineEditSplitMaxSize.setText(QCoreApplication.translate("ConfigureDialog", u"18MiB", None))
+        self.label_9.setText(QCoreApplication.translate("ConfigureDialog", u"Combine output files :", None))
+#if QT_CONFIG(tooltip)
+        self.checkBoxCombineWebGLOutput.setToolTip(QCoreApplication.translate("ConfigureDialog", u"If checked, splits the output files to be at most the size specified.", None))
+#endif // QT_CONFIG(tooltip)
+        self.checkBoxCombineWebGLOutput.setText("")
+        self.label_10.setText(QCoreApplication.translate("ConfigureDialog", u"upto", None))
+        self.lineEditCombineMaxSize.setText(QCoreApplication.translate("ConfigureDialog", u"10 MiB", None))
         self.label_8.setText(QCoreApplication.translate("ConfigureDialog", u"Level of detail :", None))
 #if QT_CONFIG(tooltip)
         self.checkBoxLODs.setToolTip(QCoreApplication.translate("ConfigureDialog", u"If checked, outputs additional files with lower tessellations.", None))

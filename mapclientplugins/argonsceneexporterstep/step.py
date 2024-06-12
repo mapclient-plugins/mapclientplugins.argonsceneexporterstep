@@ -9,7 +9,7 @@ from PySide6 import QtGui, QtWidgets, QtCore
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDialog
 from mapclientplugins.argonsceneexporterstep.splitter.utilities import convert_to_bytes
-from mapclientplugins.argonsceneexporterstep.splitter.json_resource import split_webgl_output
+from mapclientplugins.argonsceneexporterstep.splitter.json_resource import split_webgl_output, combine_webgl_output
 
 from cmlibs.exporter.flatmapsvg import ArgonSceneExporter as FlatmapSVGExporter
 from cmlibs.exporter.webgl import ArgonSceneExporter as WebGLExporter
@@ -43,7 +43,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Config:
         self._config = {'identifier': '', 'exportType': 'webgl', 'prefix': '',
                         'timeSteps': '', 'initialTime': '', 'finishTime': '',
-                        'outputDir': '', 'splitSize': '18 MiB', 'splitFiles': False}
+                        'outputDir': '', 'splitSize': '18 MiB', 'splitFiles': False,
+                        'combineSize': '10 MiB', 'combineFiles': False}
         self._model = None
 
     def execute(self):
@@ -93,6 +94,10 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
                     split_size = convert_to_bytes(self._config['splitSize'])
                     if split_size != -1:
                         split_webgl_output(self._model.metadata_file(), split_size, True)
+                if self._config['combineFiles']:
+                    combine_size = convert_to_bytes(self._config['combineSize'])
+                    if combine_size != -1:
+                        combine_webgl_output(self._model.metadata_file(), combine_size, True)
             self._doneExecution()
         finally:
             QtWidgets.QApplication.restoreOverrideCursor()
