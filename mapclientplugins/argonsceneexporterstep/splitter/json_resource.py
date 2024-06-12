@@ -240,35 +240,147 @@ def _replace_big_file(meta_content, split_files, url):
     return new_meta_content
 
 
+def _is_useful_resource(item):
+    if "URL" in item and "Type" in item and item["Type"] != "View":
+        return not isinstance(item["URL"], list)
+    return False
+
+
+def _analyse_resources(meta_content, meta_dir):
+    analysed_files = []
+    for index, item in enumerate(meta_content):
+        if _is_useful_resource(item):
+            resource = os.path.join(meta_dir, item["URL"])
+            file_stats = os.stat(resource)
+            analysed_files.append({
+                "URL": item["URL"],
+                "full_path": resource,
+                "size": file_stats.st_size,
+                "meta_index": index,
+            })
+            if "LOD" in item and "Levels" in item["LOD"]:
+                for level in item["LOD"]["Levels"]:
+                    if "URL" in item["LOD"]["Levels"][level]:
+                        if "LOD" not in analysed_files[-1]:
+                            analysed_files[-1]["LOD"] = {}
+                            analysed_files[-1]["LOD"]["Levels"] = {}
+                        resource = os.path.join(meta_dir, item["LOD"]["Levels"][level]["URL"])
+                        file_stats = os.stat(resource)
+                        analysed_files[-1]["LOD"]["Levels"][level] = {
+                            "URL": item["LOD"]["Levels"][level]["URL"],
+                            "full_path": resource,
+                            "size": file_stats.st_size,
+                        }
+
+    return analysed_files
+
+
 def split_webgl_output(meta_file, file_size_limit, delete_split_source=False):
     with open(meta_file) as f:
         meta_content = json.load(f)
 
     meta_dir = os.path.dirname(meta_file)
-    big_files = []
-    for item in meta_content:
-        if "URL" in item:
-            resource = os.path.join(meta_dir, item["URL"])
-            file_stats = os.stat(resource)
-            if file_stats.st_size > file_size_limit:
-                big_files.append({
-                    "URL": item["URL"],
-                    "full_path": resource,
-                    "size": file_stats.st_size,
-                })
+    analysed_resources = _analyse_resources(meta_content, meta_dir)
 
     new_meta_content = meta_content.copy()
-    for big_file in big_files:
-        size = big_file["size"]
-        splits_required = math.ceil(size / file_size_limit)
-        split_files = _split_file(big_file, splits_required)
-        new_meta_content = _replace_big_file(new_meta_content, split_files, big_file["URL"])
-        if delete_split_source:
-            os.remove(big_file["full_path"])
+    for resource in analysed_resources:
+        size = resource["size"]
+        if size > file_size_limit:
+            splits_required = math.ceil(size / file_size_limit)
+            split_files = _split_file(resource, splits_required)
+            new_meta_content[resource["meta_index"]]["URL"] = split_files
+            if delete_split_source:
+                os.remove(resource["full_path"])
+        if "LOD" in resource:
+            for level in resource["LOD"]["Levels"]:
+                size = resource["LOD"]["Levels"][level]["size"]
+                if size > file_size_limit:
+                    splits_required = math.ceil(size / file_size_limit)
+                    split_files = _split_file(resource["LOD"]["Levels"][level], splits_required)
+                    new_meta_content[resource["meta_index"]]["LOD"]["Levels"][level]["URL"] = split_files
+                    if delete_split_source:
+                        os.remove(resource["LOD"]["Levels"][level]["full_path"])
 
     # split_meta_file = os.path.join(meta_dir, 'split_' + os.path.basename(meta_file))
     with open(meta_file, 'w') as f:
-        json.dump(new_meta_content, f, indent=4)
+        json.dump(new_meta_content, f, default=lambda o: o.__dict__, sort_keys=True, indent=2)
+
+
+def _combination_file_name(url, index):
+    base_name, ext = os.path.splitext(url)
+    combined_url = f"{base_name}_combination_{index + 1}{ext}"
+    return combined_url
+
+
+def combine_webgl_output(meta_file, file_size_limit, delete_combined_source=False):
+    with open(meta_file) as f:
+        meta_content = json.load(f)
+
+    meta_dir = os.path.dirname(meta_file)
+    analysed_resources = _analyse_resources(meta_content, meta_dir)
+
+    new_meta_content = meta_content.copy()
+    combination_count = 0
+    combined_files = []
+    current_combination_filename = None
+    current_size = 0
+    for resource in analysed_resources:
+        size = resource["size"]
+        if (1.1 * (size + current_size)) < file_size_limit:
+            if current_combination_filename is None:
+                current_combination_filename = _combination_file_name(resource["URL"], combination_count)
+            new_meta_content[resource["meta_index"]]["URL"] = current_combination_filename
+            new_meta_content[resource["meta_index"]]["Index"] = len(combined_files)
+            combined_files.append(resource["full_path"])
+            current_size += size
+        else:
+            _combine_data_files(combined_files, current_combination_filename, delete_combined_source, meta_dir)
+
+            combination_count += 1
+            combined_files = []
+            current_combination_filename = None
+            current_size = 0
+
+        if "LOD" in resource:
+            for level in resource["LOD"]["Levels"]:
+                lod_resource = resource["LOD"]["Levels"][level]
+                size = lod_resource["size"]
+                if (1.1 * (size + current_size)) < file_size_limit:
+                    current_size += size
+                    if current_combination_filename is None:
+                        current_combination_filename = _combination_file_name(lod_resource["URL"], combination_count)
+
+                    new_meta_content[resource["meta_index"]]["LOD"]["Levels"][level]["URL"] = current_combination_filename
+                    new_meta_content[resource["meta_index"]]["LOD"]["Levels"][level]["Index"] = len(combined_files)
+                    combined_files.append(lod_resource["full_path"])
+                    current_size += size
+                else:
+                    _combine_data_files(combined_files, current_combination_filename, delete_combined_source, meta_dir)
+
+                    combination_count += 1
+                    combined_files = []
+                    current_combination_filename = None
+                    current_size = 0
+
+    _combine_data_files(combined_files, current_combination_filename, delete_combined_source, meta_dir)
+
+    with open(meta_file, 'w') as f:
+        json.dump(new_meta_content, f, default=lambda o: o.__dict__, sort_keys=True, indent=2)
+
+
+def _combine_data_files(combined_files, current_combination_filename, delete_combined_source, meta_dir):
+    if len(combined_files):
+        combined_data = []
+        for _file in combined_files:
+            with open(_file) as fh:
+                data = json.load(fh)
+            combined_data.append(data)
+
+            if delete_combined_source:
+                os.remove(_file)
+
+        with open(os.path.join(meta_dir, current_combination_filename), "w") as fh:
+            json.dump(combined_data, fh)
 
 
 def _parse_arguments():

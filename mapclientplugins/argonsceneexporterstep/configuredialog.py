@@ -50,10 +50,10 @@ class ConfigureDialog(QtWidgets.QDialog):
     def _update_ui(self):
         if self.sender() == self._ui.checkBoxLODs:
             lod_on = self._ui.checkBoxLODs.isChecked()
-            self._ui.checkBoxSplitWebGLOutput.setEnabled(not lod_on)
+            # self._ui.checkBoxSplitWebGLOutput.setEnabled(not lod_on)
         elif self.sender() == self._ui.checkBoxSplitWebGLOutput:
             webgl_on = self._ui.checkBoxSplitWebGLOutput.isChecked()
-            self._ui.checkBoxLODs.setEnabled(not webgl_on)
+            # self._ui.checkBoxLODs.setEnabled(not webgl_on)
         current_index = self._ui.comboBoxExportType.currentIndex()
         self._ui.stackedWidget.setCurrentIndex(current_index)
 
@@ -125,7 +125,8 @@ class ConfigureDialog(QtWidgets.QDialog):
                   'initialTime': self._ui.initialTime_lineEdit.text(), 'finishTime': self._ui.finishTime_lineEdit.text(),
                   'outputDir': self._output_location(), 'exportType': self._ui.comboBoxExportType.currentText(),
                   'LODs': self._ui.checkBoxLODs.isChecked(),
-                  'splitFiles': self._ui.checkBoxSplitWebGLOutput.isChecked(), 'splitSize': self._ui.splitMaxSize_lineEdit.text(),
+                  'splitFiles': self._ui.checkBoxSplitWebGLOutput.isChecked(), 'splitSize': self._ui.lineEditSplitMaxSize.text(),
+                  'combineFiles': self._ui.checkBoxCombineWebGLOutput.isChecked(), 'combineSize': self._ui.lineEditCombineMaxSize.text(),
                   'width': self._ui.spinBoxWidth.value(), 'height': self._ui.spinBoxHeight.value()}
         if self._previousLocation:
             config['previous_location'] = os.path.relpath(self._previousLocation, self._workflow_location)
@@ -148,8 +149,10 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._ui.finishTime_lineEdit.setText(config['finishTime'])
         self._ui.checkBoxLODs.setChecked(config.get('LODs', False))
         self._ui.comboBoxExportType.setCurrentText(config['exportType'])
-        self._ui.splitMaxSize_lineEdit.setText(config.get('splitSize', '18 MiB'))
+        self._ui.lineEditSplitMaxSize.setText(config.get('splitSize', '18 MiB'))
         self._ui.checkBoxSplitWebGLOutput.setChecked(config.get('splitFiles', False))
+        self._ui.lineEditCombineMaxSize.setText(config.get('combineSize', '10 MiB'))
+        self._ui.checkBoxCombineWebGLOutput.setChecked(config.get('combineFiles', False))
         self._ui.spinBoxWidth.setValue(config.get('width', 512))
         self._ui.spinBoxHeight.setValue(config.get('height', 512))
         if 'outputDir' in config:
