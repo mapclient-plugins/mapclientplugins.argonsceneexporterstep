@@ -131,10 +131,8 @@ def _split_file(big_file, splits_required):
                 current_faces.extend(
                     _map_values(current_colours, face_colour_map, faces[index: index + 3], colours, size=1))
                 _update_morph_colours(current_morph_colours, face_morph_colour_map, faces, index, morph_colours)
-
                 index += 3
                 chunk_progress += 3
-
             else:
                 raise Exception(f"Cannot handle face mask: {face_mask}.")
 
