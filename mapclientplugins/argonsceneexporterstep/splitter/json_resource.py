@@ -13,8 +13,8 @@ THREEJS_TYPE_TRIANGLE = 0
 THREEJS_TYPE_MATERIAL = 2
 THREEJS_TYPE_VERTEX_TEX_COORD = 8
 THREEJS_TYPE_VERTEX_NORMAL = 32
-THREEJS_TYPE_FACE_COLOR = 64
-THREEJS_TYPE_VERTEX_COLOR = 128
+THREEJS_TYPE_FACE_COLOUR = 64
+THREEJS_TYPE_VERTEX_COLOUR = 128
 
 
 def _pad_or_truncate(some_list, target_len):
@@ -28,12 +28,20 @@ def _split_file(big_file, splits_required):
         large_content = json.load(f)
 
     base_dir = os.path.dirname(big_file["full_path"])
-    common_items = {}
-    if "metadata" in large_content:
-        common_items["metadata"] = large_content["metadata"].copy()
-    if "materials" in large_content:
-        common_items["materials"] = large_content["materials"].copy()
 
+    keys = {
+        "common": ["metadata", "materials"],
+        "data": ["faces", "vertices", "normals", "colors", "morphColors", "uvs"]
+    }
+    common_items = {}
+    for common_key in keys["common"]:
+        if common_key in large_content:
+            common_items[common_key] = large_content[common_key].copy()
+
+    data_items = {}
+    for data_key in keys["data"]:
+        if data_key in large_content:
+            data_items[data_key] = large_content[data_key]
     vertices = None
     if "vertices" in large_content:
         vertices = large_content["vertices"]
@@ -51,15 +59,15 @@ def _split_file(big_file, splits_required):
         morph_colours = large_content["morphColors"]
 
     chunk_size = None
-    faces_len = 0
+    faces = None
     if "faces" in large_content:
-        faces_len = len(large_content["faces"])
+        faces = large_content["faces"]
+        faces_len = len(faces)
         chunk_size = int(faces_len / splits_required)
 
-    if faces_len == 0:
-        print("Help, can only deal with faces!!!")
+    if faces is None:
+        raise Exception("Help, can only deal with faces!!!")
     else:
-        faces = large_content["faces"]
         index = 0
         chunk_progress = 0
         split_faces = []
@@ -109,7 +117,7 @@ def _split_file(big_file, splits_required):
                     _map_values(current_normals, face_normal_map, faces[index: index + 3], normals))
                 index += 3
                 chunk_progress += 3
-            elif face_mask == THREEJS_TYPE_VERTEX_COLOR:
+            elif face_mask == THREEJS_TYPE_VERTEX_COLOUR:
                 current_faces.extend(
                     _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
                 index += 3
@@ -119,7 +127,7 @@ def _split_file(big_file, splits_required):
                 _update_morph_colours(current_morph_colours, face_morph_colour_map, faces, index, morph_colours)
                 index += 3
                 chunk_progress += 3
-            elif face_mask == (THREEJS_TYPE_VERTEX_NORMAL + THREEJS_TYPE_VERTEX_COLOR):
+            elif face_mask == (THREEJS_TYPE_VERTEX_NORMAL + THREEJS_TYPE_VERTEX_COLOUR):
                 current_faces.extend(
                     _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
                 index += 3
@@ -196,17 +204,18 @@ def _split_file(big_file, splits_required):
 
 
 def _update_morph_colours(current_morph_colours, face_morph_colour_map, faces, index, morph_colours):
-    for source_value in faces[index: index + 3]:
-        if source_value not in face_morph_colour_map:
+    if morph_colours is not None:
+        for source_value in faces[index: index + 3]:
+            if source_value not in face_morph_colour_map:
 
-            for index_colour, morph_colour in enumerate(morph_colours):
-                if "name" not in current_morph_colours[index_colour]:
-                    current_morph_colours[index_colour]["name"] = morph_colours[index_colour]["name"]
-                    current_morph_colours[index_colour]["colors"] = []
+                for index_colour, morph_colour in enumerate(morph_colours):
+                    if "name" not in current_morph_colours[index_colour]:
+                        current_morph_colours[index_colour]["name"] = morph_colours[index_colour]["name"]
+                        current_morph_colours[index_colour]["colors"] = []
 
-                face_morph_colour_map[source_value] = len(current_morph_colours[0]["colors"]) - 1
-                value = morph_colour["colors"][source_value]
-                current_morph_colours[index_colour]["colors"].append(value)
+                    face_morph_colour_map[source_value] = len(current_morph_colours[0]["colors"]) - 1
+                    value = morph_colour["colors"][source_value]
+                    current_morph_colours[index_colour]["colors"].append(value)
 
 
 def _list_in(a, b):
