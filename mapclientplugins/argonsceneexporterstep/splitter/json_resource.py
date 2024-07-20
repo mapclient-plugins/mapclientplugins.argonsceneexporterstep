@@ -101,7 +101,7 @@ def _split_file(big_file, splits_required):
                 chunk_progress += 3
             if face_mask & THREEJS_TYPE_VERTEX_TEX_COORD:
                 current_faces.extend(
-                    _map_values(current_uvs, face_uvs_map, faces[index: index + 3], uvs))
+                    _map_values(current_uvs, face_uvs_map, faces[index: index + 3], uvs[0], size=2))
                 index += 3
                 chunk_progress += 3
             if face_mask & THREEJS_TYPE_FACE_COLOUR:
@@ -165,7 +165,7 @@ def _split_file(big_file, splits_required):
             if len(split_colours):
                 split_data["colors"] = split_colours[chunk_index]
             if len(split_uvs):
-                split_data["uvs"] = split_uvs[chunk_index]
+                split_data["uvs"] = [split_uvs[chunk_index]]
             if len(split_morph_colours):
                 split_data["morphColors"] = split_morph_colours[chunk_index]
 
