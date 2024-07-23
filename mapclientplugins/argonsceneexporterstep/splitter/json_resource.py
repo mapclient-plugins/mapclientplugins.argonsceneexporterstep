@@ -234,8 +234,9 @@ def _replace_big_file(meta_content, split_files, url):
     return new_meta_content
 
 
-def _is_useful_resource(item):
-    if "URL" in item and "Type" in item and item["Type"] != "View":
+def _is_useful_resource(item, lod=False):
+    type_valid = True if lod else ("Type" in item and item["Type"] != "View")
+    if "URL" in item and type_valid:
         return not isinstance(item["URL"], list)
     return False
 
@@ -254,7 +255,7 @@ def _analyse_resources(meta_content, meta_dir):
             })
             if "LOD" in item and "Levels" in item["LOD"]:
                 for level in item["LOD"]["Levels"]:
-                    if "URL" in item["LOD"]["Levels"][level]:
+                    if _is_useful_resource(item["LOD"]["Levels"][level], lod=True):
                         if "LOD" not in analysed_files[-1]:
                             analysed_files[-1]["LOD"] = {}
                             analysed_files[-1]["LOD"]["Levels"] = {}
