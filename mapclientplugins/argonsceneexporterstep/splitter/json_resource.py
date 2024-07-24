@@ -18,7 +18,7 @@ THREEJS_TYPE_VERTEX_COLOUR = 128
 
 
 def _pad_or_truncate(some_list, target_len):
-    return some_list[:target_len] + [0]*(target_len - len(some_list))
+    return some_list[:target_len] + [0] * (target_len - len(some_list))
 
 
 def _split_file(big_file, splits_required):
@@ -210,7 +210,7 @@ def _map_values(current_values, value_map, source_triple, value_store, size=3):
     for source_value in source_triple:
 
         if source_value not in value_map:
-            values = value_store[size*source_value:size*source_value + size]
+            values = value_store[size * source_value:size * source_value + size]
 
             current_values.extend(values)
             value_map[source_value] = int(len(current_values) / size - 1)
@@ -315,49 +315,65 @@ def combine_webgl_output(meta_file, file_size_limit, delete_combined_source=Fals
     analysed_resources = _analyse_resources(meta_content, meta_dir)
 
     new_meta_content = meta_content.copy()
-    combination_count = 0
-    combined_files = []
-    current_combination_filename = None
-    current_size = 0
+
+    resources = {
+        "none": [],
+    }
+
     for resource in analysed_resources:
-        size = resource["size"]
-        if (1.1 * (size + current_size)) < file_size_limit:
-            if current_combination_filename is None:
-                current_combination_filename = _combination_file_name(resource["URL"], combination_count)
-            new_meta_content[resource["meta_index"]]["URL"] = current_combination_filename
-            new_meta_content[resource["meta_index"]]["Index"] = len(combined_files)
-            combined_files.append(resource["full_path"])
-            current_size += size
-        else:
-            _combine_data_files(combined_files, current_combination_filename, delete_combined_source, meta_dir)
-
-            combination_count += 1
-            combined_files = []
-            current_combination_filename = None
-            current_size = 0
-
+        resources["none"].append(resource)
         if "LOD" in resource:
             for level in resource["LOD"]["Levels"]:
                 lod_resource = resource["LOD"]["Levels"][level]
-                size = lod_resource["size"]
-                if (1.1 * (size + current_size)) < file_size_limit:
-                    current_size += size
-                    if current_combination_filename is None:
-                        current_combination_filename = _combination_file_name(lod_resource["URL"], combination_count)
+                lod_resource["meta_index"] = resource["meta_index"]
+                if level not in resources:
+                    resources[level] = []
 
-                    new_meta_content[resource["meta_index"]]["LOD"]["Levels"][level]["URL"] = current_combination_filename
-                    new_meta_content[resource["meta_index"]]["LOD"]["Levels"][level]["Index"] = len(combined_files)
-                    combined_files.append(lod_resource["full_path"])
-                    current_size += size
+                resources[level].append(lod_resource)
+
+    combine = {}
+    for key in resources:
+        level_data = sorted(resources[key], key=lambda entry: entry['size'])
+        sizes = [d['size'] for d in level_data]
+
+        total = 0
+        count = 0
+
+        if key not in combine:
+            combine[key] = []
+
+        stack = []
+        for i, s in enumerate(sizes):
+            if total + s < file_size_limit:
+                count += 1
+                total += s
+                stack.append(level_data[i])
+            else:
+                if count == 1:
+                    break
+
+                combine[key].append(stack)
+                stack = [level_data[i]]
+                total = s
+                count = 1
+
+        if count > 1:
+            combine[key].append(stack)
+
+    for key in combine:
+        for i, combine_resources in enumerate(combine[key]):
+            filename = _combination_file_name(combine_resources[0]["URL"], i)
+            combine_filenames = []  # resource["full_path"] for resource in combine_resources]
+            for j, resource in enumerate(combine_resources):
+                combine_filenames.append(resource["full_path"])
+                if key == 'none':
+                    new_meta_content[resource["meta_index"]]["URL"] = filename
+                    new_meta_content[resource["meta_index"]]["Index"] = j
                 else:
-                    _combine_data_files(combined_files, current_combination_filename, delete_combined_source, meta_dir)
+                    new_meta_content[resource["meta_index"]]["LOD"]["Levels"][key]["URL"] = filename
+                    new_meta_content[resource["meta_index"]]["LOD"]["Levels"][key]["Index"] = j
 
-                    combination_count += 1
-                    combined_files = []
-                    current_combination_filename = None
-                    current_size = 0
-
-    _combine_data_files(combined_files, current_combination_filename, delete_combined_source, meta_dir)
+            _combine_data_files(combine_filenames, filename, delete_combined_source, meta_dir)
 
     with open(meta_file, 'w') as f:
         json.dump(new_meta_content, f, default=lambda o: o.__dict__, sort_keys=True, indent=2)
