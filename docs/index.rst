@@ -42,6 +42,7 @@ There are also parameters that are dependent on the exporter chosen.
 The *webGL* exporter also has the following optional parameters:
 
 #. Split output files
+#. Combine output files
 #. Level of detail
 #. Time Steps
 #. Initial Time
@@ -65,6 +66,8 @@ If the scene is not time varying these parameters are ignored.
 
 The *Split output files* and associated file size, allows a big output file to be split into multiple smaller files when
 checked and the split files are limited by the specified memory size.
+The *Combine output files* and associated file size, allows for combining smaller files to be combined into a single file
+limited to the size specified. Files are combined when the check box is checked.
 The *Level of detail*, when checked, allows generation of webGL exports that provide higher level of details with zoom.
 
 The *Width* parameter, is an integer that sets the width of the exported image.
