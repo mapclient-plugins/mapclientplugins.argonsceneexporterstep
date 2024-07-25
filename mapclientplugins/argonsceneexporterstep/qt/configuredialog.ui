@@ -290,7 +290,7 @@
              <item>
               <widget class="QLineEdit" name="lineEditCombineMaxSize">
                <property name="text">
-                <string>10 MiB</string>
+                <string>703 KiB</string>
                </property>
               </widget>
              </item>

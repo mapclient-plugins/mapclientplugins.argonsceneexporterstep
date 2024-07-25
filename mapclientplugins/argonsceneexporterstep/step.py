@@ -44,7 +44,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         self._config = {'identifier': '', 'exportType': 'webgl', 'prefix': '',
                         'timeSteps': '', 'initialTime': '', 'finishTime': '',
                         'outputDir': '', 'splitSize': '18 MiB', 'splitFiles': False,
-                        'combineSize': '10 MiB', 'combineFiles': False}
+                        'combineSize': '703 KiB', 'combineFiles': False}
         self._model = None
 
     def execute(self):

@@ -331,7 +331,7 @@ class Ui_ConfigureDialog(object):
 #endif // QT_CONFIG(tooltip)
         self.checkBoxCombineWebGLOutput.setText("")
         self.label_10.setText(QCoreApplication.translate("ConfigureDialog", u"upto", None))
-        self.lineEditCombineMaxSize.setText(QCoreApplication.translate("ConfigureDialog", u"10 MiB", None))
+        self.lineEditCombineMaxSize.setText(QCoreApplication.translate("ConfigureDialog", u"703 KiB", None))
         self.label_8.setText(QCoreApplication.translate("ConfigureDialog", u"Level of detail :", None))
 #if QT_CONFIG(tooltip)
         self.checkBoxLODs.setToolTip(QCoreApplication.translate("ConfigureDialog", u"If checked, outputs additional files with lower tessellations.", None))

@@ -151,7 +151,7 @@ class ConfigureDialog(QtWidgets.QDialog):
         self._ui.comboBoxExportType.setCurrentText(config['exportType'])
         self._ui.lineEditSplitMaxSize.setText(config.get('splitSize', '18 MiB'))
         self._ui.checkBoxSplitWebGLOutput.setChecked(config.get('splitFiles', False))
-        self._ui.lineEditCombineMaxSize.setText(config.get('combineSize', '10 MiB'))
+        self._ui.lineEditCombineMaxSize.setText(config.get('combineSize', '703 KiB'))
         self._ui.checkBoxCombineWebGLOutput.setChecked(config.get('combineFiles', False))
         self._ui.spinBoxWidth.setValue(config.get('width', 512))
         self._ui.spinBoxHeight.setValue(config.get('height', 512))
