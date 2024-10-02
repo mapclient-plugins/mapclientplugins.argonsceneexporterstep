@@ -98,6 +98,7 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
                     combine_size = convert_to_bytes(self._config['combineSize'])
                     if combine_size != -1:
                         combine_webgl_output(self._model.metadata_file(), combine_size, True)
+
             self._doneExecution()
         finally:
             QtWidgets.QApplication.restoreOverrideCursor()
