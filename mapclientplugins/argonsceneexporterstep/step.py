@@ -5,6 +5,7 @@ import os
 import json
 
 from PySide6 import QtGui, QtWidgets, QtCore
+from cmlibs.argon.argondocument import ArgonDocument
 
 from mapclient.mountpoints.workflowstep import WorkflowStepMountPoint
 from mapclientplugins.argonsceneexporterstep.configuredialog import ConfigureDialog
@@ -32,9 +33,13 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         # Add any other initialisation code here:
         self._icon = QtGui.QImage(':/argonsceneexporterstep/images/data-sink.png')
         # Ports:
-        self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
+        self.addPort([('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
-                      'https://cmlibs.org/1.0/rdf-schema#ArgonDocument'))
+                      'https://cmlibs.org/1.0/rdf-schema#ArgonDocument'),
+                      ('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
+                       'http://physiomeproject.org/workflow/1.0/rdf-schema#uses',
+                       'http://physiomeproject.org/workflow/1.0/rdf-schema#file_location')
+                      ])
         self.addPort(('http://physiomeproject.org/workflow/1.0/rdf-schema#port',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#provides',
                       'http://physiomeproject.org/workflow/1.0/rdf-schema#directory_location'))
@@ -103,16 +108,25 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
         finally:
             QtWidgets.QApplication.restoreOverrideCursor()
 
-    def setPortData(self, index, dataIn):
+    def setPortData(self, index, data_in):
         """
         Add your code here that will set the appropriate objects for this step.
         The index is the index of the port in the port list.  If there is only one
         uses port for this step then the index can be ignored.
 
         :param index: Index of the port to return.
-        :param dataIn: The data to set for the port at the given index.
+        :param data_in: The data to set for the port at the given index.
         """
-        self._document = dataIn  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
+        if isinstance(data_in, str) and os.path.isfile(data_in):
+            with open(data_in) as fh:
+                content = fh.read()
+
+            document = ArgonDocument()
+            document.initialiseVisualisationContents()
+            document.deserialize(content, base_path=os.path.dirname(data_in))
+            data_in = document
+
+        self._document = data_in  # http://physiomeproject.org/workflow/1.0/rdf-schema#file_location
 
     def getPortData(self, index):
         """
