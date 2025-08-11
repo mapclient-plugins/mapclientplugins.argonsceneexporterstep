@@ -349,7 +349,7 @@ def combine_webgl_output(meta_file, file_size_limit, delete_combined_source=Fals
                 total += s
                 stack.append(level_data[i])
             else:
-                if count == 1:
+                if count < 2:
                     break
 
                 combine[key].append(stack)
