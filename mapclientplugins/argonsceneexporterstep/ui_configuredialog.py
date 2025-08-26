@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'configuredialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.2
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -25,7 +25,7 @@ class Ui_ConfigureDialog(object):
     def setupUi(self, ConfigureDialog):
         if not ConfigureDialog.objectName():
             ConfigureDialog.setObjectName(u"ConfigureDialog")
-        ConfigureDialog.resize(377, 444)
+        ConfigureDialog.resize(377, 462)
         self.gridLayout = QGridLayout(ConfigureDialog)
         self.gridLayout.setObjectName(u"gridLayout")
         self.configGroupBox = QGroupBox(ConfigureDialog)
@@ -35,27 +35,27 @@ class Ui_ConfigureDialog(object):
         self.label0 = QLabel(self.configGroupBox)
         self.label0.setObjectName(u"label0")
 
-        self.formLayout_3.setWidget(0, QFormLayout.LabelRole, self.label0)
+        self.formLayout_3.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label0)
 
         self.lineEditIdentifier = QLineEdit(self.configGroupBox)
         self.lineEditIdentifier.setObjectName(u"lineEditIdentifier")
 
-        self.formLayout_3.setWidget(0, QFormLayout.FieldRole, self.lineEditIdentifier)
+        self.formLayout_3.setWidget(0, QFormLayout.ItemRole.FieldRole, self.lineEditIdentifier)
 
         self.label_3 = QLabel(self.configGroupBox)
         self.label_3.setObjectName(u"label_3")
 
-        self.formLayout_3.setWidget(1, QFormLayout.LabelRole, self.label_3)
+        self.formLayout_3.setWidget(1, QFormLayout.ItemRole.LabelRole, self.label_3)
 
         self.prefix_lineEdit = QLineEdit(self.configGroupBox)
         self.prefix_lineEdit.setObjectName(u"prefix_lineEdit")
 
-        self.formLayout_3.setWidget(1, QFormLayout.FieldRole, self.prefix_lineEdit)
+        self.formLayout_3.setWidget(1, QFormLayout.ItemRole.FieldRole, self.prefix_lineEdit)
 
         self.label1 = QLabel(self.configGroupBox)
         self.label1.setObjectName(u"label1")
 
-        self.formLayout_3.setWidget(2, QFormLayout.LabelRole, self.label1)
+        self.formLayout_3.setWidget(2, QFormLayout.ItemRole.LabelRole, self.label1)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -70,12 +70,12 @@ class Ui_ConfigureDialog(object):
         self.horizontalLayout.addWidget(self.pushButtonOutputDirectory)
 
 
-        self.formLayout_3.setLayout(2, QFormLayout.FieldRole, self.horizontalLayout)
+        self.formLayout_3.setLayout(2, QFormLayout.ItemRole.FieldRole, self.horizontalLayout)
 
         self.label_5 = QLabel(self.configGroupBox)
         self.label_5.setObjectName(u"label_5")
 
-        self.formLayout_3.setWidget(3, QFormLayout.LabelRole, self.label_5)
+        self.formLayout_3.setWidget(3, QFormLayout.ItemRole.LabelRole, self.label_5)
 
         self.comboBoxExportType = QComboBox(self.configGroupBox)
         self.comboBoxExportType.addItem("")
@@ -85,9 +85,10 @@ class Ui_ConfigureDialog(object):
         self.comboBoxExportType.addItem("")
         self.comboBoxExportType.addItem("")
         self.comboBoxExportType.addItem("")
+        self.comboBoxExportType.addItem("")
         self.comboBoxExportType.setObjectName(u"comboBoxExportType")
 
-        self.formLayout_3.setWidget(3, QFormLayout.FieldRole, self.comboBoxExportType)
+        self.formLayout_3.setWidget(3, QFormLayout.ItemRole.FieldRole, self.comboBoxExportType)
 
         self.stackedWidget = QStackedWidget(self.configGroupBox)
         self.stackedWidget.setObjectName(u"stackedWidget")
@@ -103,7 +104,7 @@ class Ui_ConfigureDialog(object):
         self.labelWidth = QLabel(self.pageImage)
         self.labelWidth.setObjectName(u"labelWidth")
 
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.labelWidth)
+        self.formLayout.setWidget(0, QFormLayout.ItemRole.LabelRole, self.labelWidth)
 
         self.spinBoxWidth = QSpinBox(self.pageImage)
         self.spinBoxWidth.setObjectName(u"spinBoxWidth")
@@ -111,12 +112,12 @@ class Ui_ConfigureDialog(object):
         self.spinBoxWidth.setMaximum(9999)
         self.spinBoxWidth.setValue(512)
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.spinBoxWidth)
+        self.formLayout.setWidget(0, QFormLayout.ItemRole.FieldRole, self.spinBoxWidth)
 
         self.labelHeight = QLabel(self.pageImage)
         self.labelHeight.setObjectName(u"labelHeight")
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.labelHeight)
+        self.formLayout.setWidget(1, QFormLayout.ItemRole.LabelRole, self.labelHeight)
 
         self.spinBoxHeight = QSpinBox(self.pageImage)
         self.spinBoxHeight.setObjectName(u"spinBoxHeight")
@@ -124,7 +125,7 @@ class Ui_ConfigureDialog(object):
         self.spinBoxHeight.setMaximum(9999)
         self.spinBoxHeight.setValue(512)
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.spinBoxHeight)
+        self.formLayout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.spinBoxHeight)
 
         self.stackedWidget.addWidget(self.pageImage)
         self.pageSTL = QWidget()
@@ -151,7 +152,7 @@ class Ui_ConfigureDialog(object):
 
         self.frame = QFrame(self.pageWebGL)
         self.frame.setObjectName(u"frame")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
@@ -268,13 +269,13 @@ class Ui_ConfigureDialog(object):
 
         self.gridLayout_2.addWidget(self.finishTime_lineEdit, 5, 1, 1, 2)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_2.addItem(self.verticalSpacer, 6, 2, 1, 1)
 
         self.stackedWidget.addWidget(self.pageWebGL)
 
-        self.formLayout_3.setWidget(4, QFormLayout.SpanningRole, self.stackedWidget)
+        self.formLayout_3.setWidget(4, QFormLayout.ItemRole.SpanningRole, self.stackedWidget)
 
 
         self.gridLayout.addWidget(self.configGroupBox, 0, 0, 1, 1)
@@ -293,7 +294,7 @@ class Ui_ConfigureDialog(object):
         self.buttonBox.accepted.connect(ConfigureDialog.accept)
         self.buttonBox.rejected.connect(ConfigureDialog.reject)
 
-        self.comboBoxExportType.setCurrentIndex(6)
+        self.comboBoxExportType.setCurrentIndex(7)
         self.stackedWidget.setCurrentIndex(6)
 
 
@@ -310,12 +311,14 @@ class Ui_ConfigureDialog(object):
         self.label_5.setText(QCoreApplication.translate("ConfigureDialog", u"Export type :", None))
         self.comboBoxExportType.setItemText(0, QCoreApplication.translate("ConfigureDialog", u"flatmapsvg", None))
         self.comboBoxExportType.setItemText(1, QCoreApplication.translate("ConfigureDialog", u"image", None))
-        self.comboBoxExportType.setItemText(2, QCoreApplication.translate("ConfigureDialog", u"stl", None))
-        self.comboBoxExportType.setItemText(3, QCoreApplication.translate("ConfigureDialog", u"thumbnail", None))
-        self.comboBoxExportType.setItemText(4, QCoreApplication.translate("ConfigureDialog", u"vtk", None))
-        self.comboBoxExportType.setItemText(5, QCoreApplication.translate("ConfigureDialog", u"wavefront", None))
-        self.comboBoxExportType.setItemText(6, QCoreApplication.translate("ConfigureDialog", u"webgl", None))
+        self.comboBoxExportType.setItemText(2, QCoreApplication.translate("ConfigureDialog", u"mbfxml", None))
+        self.comboBoxExportType.setItemText(3, QCoreApplication.translate("ConfigureDialog", u"stl", None))
+        self.comboBoxExportType.setItemText(4, QCoreApplication.translate("ConfigureDialog", u"thumbnail", None))
+        self.comboBoxExportType.setItemText(5, QCoreApplication.translate("ConfigureDialog", u"vtk", None))
+        self.comboBoxExportType.setItemText(6, QCoreApplication.translate("ConfigureDialog", u"wavefront", None))
+        self.comboBoxExportType.setItemText(7, QCoreApplication.translate("ConfigureDialog", u"webgl", None))
 
+        self.comboBoxExportType.setCurrentText(QCoreApplication.translate("ConfigureDialog", u"webgl", None))
         self.labelWidth.setText(QCoreApplication.translate("ConfigureDialog", u"Width:", None))
         self.labelHeight.setText(QCoreApplication.translate("ConfigureDialog", u"Height:", None))
         self.label_6.setText(QCoreApplication.translate("ConfigureDialog", u"Split output files :", None))

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>377</width>
-    <height>444</height>
+    <height>462</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -70,8 +70,11 @@
       </item>
       <item row="3" column="1">
        <widget class="QComboBox" name="comboBoxExportType">
+        <property name="currentText">
+         <string>webgl</string>
+        </property>
         <property name="currentIndex">
-         <number>6</number>
+         <number>7</number>
         </property>
         <item>
          <property name="text">
@@ -81,6 +84,11 @@
         <item>
          <property name="text">
           <string>image</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>mbfxml</string>
          </property>
         </item>
         <item>

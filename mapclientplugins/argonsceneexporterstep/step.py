@@ -18,6 +18,7 @@ from cmlibs.exporter.wavefront import ArgonSceneExporter as WavefrontExporter
 from cmlibs.exporter.stl import ArgonSceneExporter as STLExporter
 from cmlibs.exporter.thumbnail import ArgonSceneExporter as ThumbnailExporter
 from cmlibs.exporter.image import ArgonSceneExporter as ImageExporter
+from cmlibs.exporter.mbfxml import ArgonSceneExporter as MBFXMLExporter
 
 
 class ArgonSceneExporterStep(WorkflowStepMountPoint):
@@ -74,6 +75,8 @@ class ArgonSceneExporterStep(WorkflowStepMountPoint):
                 self._model = ThumbnailExporter(output_dir)
             elif self._config['exportType'] == 'image':
                 self._model = ImageExporter(self._config['width'], self._config['height'], output_dir)
+            elif self._config['exportType'] == 'mbfxml':
+                self._model = MBFXMLExporter(output_dir)
             else:
                 raise NotImplementedError('Current export type selection is not implemented.')
 
