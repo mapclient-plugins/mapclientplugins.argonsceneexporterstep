@@ -151,12 +151,13 @@ def _split_faces(base_dir, file_url, large_content, splits_required):
             # These aren't really triangles they are interpreted as lines so, we can't
             # break on an odd number of vertex pairs.
             # If we are even do nothing otherwise add one more face on to make it even.
-            even = int(len(current_faces) - len(current_faces) / 4) % 2 == 0
+            even = (len(current_faces) - len(current_faces) // 4) % 2 == 0
             if not even:
                 current_faces.extend(
                     _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
-                index += 3
-                chunk_progress += 3
+                # We are stepping 3 for the values and 1 for the mask, so total 4 steps.
+                index += 4
+                chunk_progress += 4
         if face_mask & THREEJS_TYPE_VERTEX_NORMAL:
             current_faces.extend(
                 _map_values(current_normals, face_normal_map, faces[index: index + 3], normals))
