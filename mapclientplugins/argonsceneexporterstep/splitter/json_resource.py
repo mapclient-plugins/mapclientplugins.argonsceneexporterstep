@@ -4,6 +4,8 @@ import math
 import os
 import sys
 
+from copy import deepcopy
+
 from mapclientplugins.argonsceneexporterstep.splitter.utilities import convert_to_bytes
 
 FILE_SIZE_LIMIT = 1024 * 1024 * 18
@@ -29,149 +31,215 @@ def _split_file(big_file, splits_required):
 
     base_dir = os.path.dirname(big_file["full_path"])
 
-    common_items = {}
-    for common_key in ["metadata", "materials"]:
-        if common_key in large_content:
-            common_items[common_key] = large_content[common_key].copy()
-
     faces = large_content.get("faces", None)
+    glyph_data = all([key in large_content for key in ["GlyphGeometriesURL", "metadata", "positions", "scale"]])
+    if faces is not None:
+        split_files = _split_faces(base_dir, big_file["URL"], large_content, splits_required)
+    elif glyph_data:
+        split_files = _split_glyphs(base_dir, big_file["URL"], large_content, splits_required)
+
+    return split_files
+
+
+def _form_split_url(base_url, chunk_index):
+    base_name, ext = os.path.splitext(base_url)
+    return f"{base_name}_split_{chunk_index + 1}{ext}"
+
+
+def _split_glyphs(base_dir, file_url, large_content, splits_required):
+    split_urls = []
+    split_glyph_data = _split_glyph_data(large_content, splits_required)
+    for index, chunk in enumerate(split_glyph_data):
+        split_url = _form_split_url(file_url, index)
+        split_urls.append(split_url)
+        with open(os.path.join(base_dir, split_url), 'w') as f:
+            json.dump(chunk, f)
+
+    return split_urls
+
+
+def _split_glyph_data(data, num_chunks=5):
+    chunks = []
+    metadata = data.get("metadata", {"number_of_vertices": 0})
+    num_entries = metadata["number_of_vertices"]
+    labels = data.get("label", [])
+
+    # Identify keys that should be split into smaller lists.
+    list_keys = ["axis1", "axis2", "axis3", "positions", "scale"]
+    step_size = math.ceil(num_entries / num_chunks)
+
+    for i in range(0, num_entries, step_size):
+        # Create the base structure with shared metadata.
+        chunk = {
+            "GlyphGeometriesURL": data.get("GlyphGeometriesURL", ""),
+            "metadata": deepcopy(metadata),
+            "label": labels[i: i + step_size],
+        }
+
+        # Calculate start and end indices for the flat lists (3 values per label).
+        start_idx = i * 3
+        end_idx = (i + step_size) * 3
+
+        resized = False
+        chunk["metadata"]["number_of_vertices"] = len(chunk["label"])
+
+        # Slice the lists inside each dictionary key.
+        for key in list_keys:
+            if key in data:
+                sliced_data = {}
+                for index in data[key]:
+                    sliced_data[index] = data[key][index][start_idx:end_idx]
+                    if not resized:
+                        resized = True
+                        chunk["metadata"]["number_of_vertices"] = len(sliced_data[index]) // 3
+                chunk[key] = sliced_data
+
+        chunks.append(chunk)
+
+    return chunks
+
+
+def _split_faces(base_dir, file_url, large_content, splits_required):
+    split_files = []
+    faces = large_content["faces"]
     vertices = large_content.get("vertices", None)
     normals = large_content.get("normals", None)
     colours = large_content.get("colors", None)
     uvs = large_content.get("uvs", None)
     morph_colours = large_content.get("morphColors", None)
 
-    if faces is None:
-        raise Exception("Help, can only deal with faces!!!")
-    else:
-        data_len = len(faces)
-        chunk_size = data_len // splits_required
-        index = 0
-        chunk_progress = 0
+    common_items = {}
+    for common_key in ["metadata", "materials"]:
+        if common_key in large_content:
+            common_items[common_key] = large_content[common_key].copy()
 
-        split_faces = []
-        split_vertices = []
-        split_normals = []
-        split_colours = []
-        split_uvs = []
-        split_morph_colours = []
-        current_faces = []
-        current_vertices = []
-        current_normals = []
-        current_colours = []
-        current_uvs = []
-        morph_colours_count = 0 if morph_colours is None else len(morph_colours)
-        current_morph_colours = [{} for _ in range(morph_colours_count)]
-        face_vertex_map = {}
-        face_normal_map = {}
-        face_colour_map = {}
-        face_uvs_map = {}
-        face_morph_colour_map = {}
+    data_len = len(faces)
+    chunk_size = data_len // splits_required
+    index = 0
+    chunk_progress = 0
 
-        while index < data_len:
-            face_mask = faces[index]
-            current_faces.append(face_mask)
-            index += 1
-            chunk_progress += 1
-            # We always have vertices.
+    split_faces = []
+    split_vertices = []
+    split_normals = []
+    split_colours = []
+    split_uvs = []
+    split_morph_colours = []
+    current_faces = []
+    current_vertices = []
+    current_normals = []
+    current_colours = []
+    current_uvs = []
+    morph_colours_count = 0 if morph_colours is None else len(morph_colours)
+    current_morph_colours = [{} for _ in range(morph_colours_count)]
+    face_vertex_map = {}
+    face_normal_map = {}
+    face_colour_map = {}
+    face_uvs_map = {}
+    face_morph_colour_map = {}
+
+    while index < data_len:
+        face_mask = faces[index]
+        current_faces.append(face_mask)
+        index += 1
+        chunk_progress += 1
+        # We always have vertices.
+        current_faces.extend(
+            _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
+        index += 3
+        chunk_progress += 3
+        if face_mask == THREEJS_TYPE_TRIANGLE and chunk_progress >= chunk_size and index < data_len:
+            # These aren't really triangles they are interpreted as lines so, we can't
+            # break on an odd number of vertex pairs.
+            # If we are even do nothing otherwise add one more face on to make it even.
+            even = int(len(current_faces) - len(current_faces) / 4) % 2 == 0
+            if not even:
+                current_faces.extend(
+                    _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
+                index += 3
+                chunk_progress += 3
+        if face_mask & THREEJS_TYPE_VERTEX_NORMAL:
             current_faces.extend(
-                _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
+                _map_values(current_normals, face_normal_map, faces[index: index + 3], normals))
             index += 3
             chunk_progress += 3
-            if face_mask == THREEJS_TYPE_TRIANGLE and chunk_progress >= chunk_size and index < data_len:
-                # These aren't really triangles they are interpreted as lines so, we can't
-                # break on an odd number of vertex pairs.
-                # If we are even do nothing otherwise add one more face on to make it even.
-                even = int(len(current_faces) - len(current_faces) / 4) % 2 == 0
-                if not even:
-                    current_faces.extend(
-                        _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
-                    index += 3
-                    chunk_progress += 3
-            if face_mask & THREEJS_TYPE_VERTEX_NORMAL:
-                current_faces.extend(
-                    _map_values(current_normals, face_normal_map, faces[index: index + 3], normals))
-                index += 3
-                chunk_progress += 3
-            if face_mask & THREEJS_TYPE_VERTEX_COLOUR:
-                current_faces.extend(
-                    _map_values(current_colours, face_colour_map, faces[index: index + 3], colours, size=1))
-                _update_morph_colours(current_morph_colours, face_morph_colour_map, faces, index, morph_colours)
-                index += 3
-                chunk_progress += 3
-            if face_mask & THREEJS_TYPE_VERTEX_TEX_COORD:
-                current_faces.extend(
-                    _map_values(current_uvs, face_uvs_map, faces[index: index + 3], uvs[0], size=2))
-                index += 3
-                chunk_progress += 3
-            if face_mask & THREEJS_TYPE_FACE_COLOUR:
-                raise Exception(f"Cannot handle face mask: {face_mask}. Not dealing with {THREEJS_TYPE_FACE_COLOUR}")
-            if face_mask & THREEJS_TYPE_MATERIAL:
-                raise Exception(f"Cannot handle face mask: {face_mask}. Not dealing with {THREEJS_TYPE_MATERIAL}")
+        if face_mask & THREEJS_TYPE_VERTEX_COLOUR:
+            current_faces.extend(
+                _map_values(current_colours, face_colour_map, faces[index: index + 3], colours, size=1))
+            _update_morph_colours(current_morph_colours, face_morph_colour_map, faces, index, morph_colours)
+            index += 3
+            chunk_progress += 3
+        if face_mask & THREEJS_TYPE_VERTEX_TEX_COORD:
+            current_faces.extend(
+                _map_values(current_uvs, face_uvs_map, faces[index: index + 3], uvs[0], size=2))
+            index += 3
+            chunk_progress += 3
+        if face_mask & THREEJS_TYPE_FACE_COLOUR:
+            raise Exception(f"Cannot handle face mask: {face_mask}. Not dealing with {THREEJS_TYPE_FACE_COLOUR}")
+        if face_mask & THREEJS_TYPE_MATERIAL:
+            raise Exception(f"Cannot handle face mask: {face_mask}. Not dealing with {THREEJS_TYPE_MATERIAL}")
 
-            if chunk_progress >= chunk_size:
-                if len(current_faces):
-                    split_faces.append(current_faces[:])
-                if len(current_vertices):
-                    split_vertices.append(current_vertices[:])
-                if len(current_normals):
-                    split_normals.append(current_normals[:])
-                if len(current_colours):
-                    split_colours.append(current_colours[:])
-                if len(current_uvs):
-                    split_uvs.append(current_uvs[:])
-                if len(current_morph_colours):
-                    split_morph_colours.append(current_morph_colours.copy())
+        if chunk_progress >= chunk_size:
+            if len(current_faces):
+                split_faces.append(current_faces[:])
+            if len(current_vertices):
+                split_vertices.append(current_vertices[:])
+            if len(current_normals):
+                split_normals.append(current_normals[:])
+            if len(current_colours):
+                split_colours.append(current_colours[:])
+            if len(current_uvs):
+                split_uvs.append(current_uvs[:])
+            if len(current_morph_colours):
+                split_morph_colours.append(current_morph_colours.copy())
 
-                chunk_progress = 0
-                current_faces = []
-                current_vertices = []
-                current_normals = []
-                current_colours = []
-                current_uvs = []
-                current_morph_colours = [{} for _ in range(morph_colours_count)]
-                face_vertex_map = {}
-                face_normal_map = {}
-                face_colour_map = {}
-                face_uvs_map = {}
-                face_morph_colour_map = {}
+            chunk_progress = 0
+            current_faces = []
+            current_vertices = []
+            current_normals = []
+            current_colours = []
+            current_uvs = []
+            current_morph_colours = [{} for _ in range(morph_colours_count)]
+            face_vertex_map = {}
+            face_normal_map = {}
+            face_colour_map = {}
+            face_uvs_map = {}
+            face_morph_colour_map = {}
 
-        # Mop up any remaining bits and pieces.
-        if len(current_faces):
-            split_faces.append(current_faces[:])
-        if len(current_vertices):
-            split_vertices.append(current_vertices[:])
-        if len(current_normals):
-            split_normals.append(current_normals[:])
-        if len(current_colours):
-            split_colours.append(current_colours[:])
-        if len(current_uvs):
-            split_uvs.append(current_uvs[:])
-        if len(current_morph_colours):
-            split_morph_colours.append(current_morph_colours.copy())
+    # Mop up any remaining bits and pieces.
+    if len(current_faces):
+        split_faces.append(current_faces[:])
+    if len(current_vertices):
+        split_vertices.append(current_vertices[:])
+    if len(current_normals):
+        split_normals.append(current_normals[:])
+    if len(current_colours):
+        split_colours.append(current_colours[:])
+    if len(current_uvs):
+        split_uvs.append(current_uvs[:])
+    if len(current_morph_colours):
+        split_morph_colours.append(current_morph_colours.copy())
 
-        for chunk_index, split_face_values in enumerate(split_faces):
-            split_data = common_items.copy()
+    for chunk_index, split_face_values in enumerate(split_faces):
+        split_data = common_items.copy()
 
-            base_name, ext = os.path.splitext(big_file["URL"])
-            split_url = f"{base_name}_split_{chunk_index + 1}{ext}"
-            split_files.append(split_url)
+        split_url = _form_split_url(file_url, chunk_index)
+        split_files.append(split_url)
 
-            split_data["faces"] = split_face_values
-            if len(split_vertices):
-                split_data["vertices"] = split_vertices[chunk_index]
-            if len(split_normals):
-                split_data["normals"] = split_normals[chunk_index]
-            if len(split_colours):
-                split_data["colors"] = split_colours[chunk_index]
-            if len(split_uvs):
-                split_data["uvs"] = [split_uvs[chunk_index]]
-            if len(split_morph_colours):
-                split_data["morphColors"] = split_morph_colours[chunk_index]
+        split_data["faces"] = split_face_values
+        if len(split_vertices):
+            split_data["vertices"] = split_vertices[chunk_index]
+        if len(split_normals):
+            split_data["normals"] = split_normals[chunk_index]
+        if len(split_colours):
+            split_data["colors"] = split_colours[chunk_index]
+        if len(split_uvs):
+            split_data["uvs"] = [split_uvs[chunk_index]]
+        if len(split_morph_colours):
+            split_data["morphColors"] = split_morph_colours[chunk_index]
 
-            split_file = os.path.join(base_dir, split_url)
-            with open(split_file, 'w') as f:
-                json.dump(split_data, f)
+        split_file = os.path.join(base_dir, split_url)
+        with open(split_file, 'w') as f:
+            json.dump(split_data, f)
 
     return split_files
 
