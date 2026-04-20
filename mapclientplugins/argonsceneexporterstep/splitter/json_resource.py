@@ -23,7 +23,7 @@ def _pad_or_truncate(some_list, target_len):
     return some_list[:target_len] + [0] * (target_len - len(some_list))
 
 
-def _split_file(big_file, splits_required):
+def _split_file(big_file, splits_required, content_type):
     split_files = []
 
     with open(big_file["full_path"]) as f:
@@ -31,12 +31,14 @@ def _split_file(big_file, splits_required):
 
     base_dir = os.path.dirname(big_file["full_path"])
 
-    faces = large_content.get("faces", None)
-    glyph_data = all([key in large_content for key in ["GlyphGeometriesURL", "metadata", "positions", "scale"]])
-    if faces is not None:
+    if content_type == "Surfaces":
         split_files = _split_faces(base_dir, big_file["URL"], large_content, splits_required)
-    elif glyph_data:
+    elif content_type == "Glyph":
         split_files = _split_glyphs(base_dir, big_file["URL"], large_content, splits_required)
+    elif content_type == "Lines":
+        split_files = _split_faces(base_dir, big_file["URL"], large_content, splits_required)
+    else:
+        print(f"Asked to split type: '{content_type}', but this resource type is not supported.")
 
     return split_files
 
@@ -153,11 +155,13 @@ def _split_faces(base_dir, file_url, large_content, splits_required):
             # If we are even do nothing otherwise add one more face on to make it even.
             even = (len(current_faces) - len(current_faces) // 4) % 2 == 0
             if not even:
+                current_faces.append(face_mask)
+                index += 1
+                chunk_progress += 1
                 current_faces.extend(
                     _map_values(current_vertices, face_vertex_map, faces[index: index + 3], vertices))
-                # We are stepping 3 for the values and 1 for the mask, so total 4 steps.
-                index += 4
-                chunk_progress += 4
+                index += 3
+                chunk_progress += 3
         if face_mask & THREEJS_TYPE_VERTEX_NORMAL:
             current_faces.extend(
                 _map_values(current_normals, face_normal_map, faces[index: index + 3], normals))
@@ -321,6 +325,7 @@ def _analyse_resources(meta_content, meta_dir):
                 "full_path": resource,
                 "size": file_stats.st_size,
                 "meta_index": index,
+                "type": item.get("Type", "not-specified"),
             })
             if "LOD" in item and "Levels" in item["LOD"]:
                 for level in item["LOD"]["Levels"]:
@@ -351,7 +356,7 @@ def split_webgl_output(meta_file, file_size_limit, delete_split_source=False):
         size = resource["size"]
         if size > file_size_limit:
             splits_required = math.ceil(size / file_size_limit)
-            split_files = _split_file(resource, splits_required)
+            split_files = _split_file(resource, splits_required, resource.get('type', 'none'))
             new_meta_content[resource["meta_index"]]["URL"] = split_files
             if delete_split_source:
                 os.remove(resource["full_path"])
@@ -360,7 +365,7 @@ def split_webgl_output(meta_file, file_size_limit, delete_split_source=False):
                 size = resource["LOD"]["Levels"][level]["size"]
                 if size > file_size_limit:
                     splits_required = math.ceil(size / file_size_limit)
-                    split_files = _split_file(resource["LOD"]["Levels"][level], splits_required)
+                    split_files = _split_file(resource["LOD"]["Levels"][level], splits_required, resource.get('type', 'none'))
                     new_meta_content[resource["meta_index"]]["LOD"]["Levels"][level]["URL"] = split_files
                     if delete_split_source:
                         os.remove(resource["LOD"]["Levels"][level]["full_path"])
